@@ -13,6 +13,7 @@ libraryDependencies ++= Seq(
   "io.spray" %%  "spray-json" % "1.3.5",
   "org.scalactic" %% "scalactic" % "3.0.8",
   scalaTest % Test,
-  "org.scalamock" %% "scalamock" % "4.4.0" % Test
+  "org.scalamock" %% "scalamock" % "4.4.0" % Test,
+  "org.mockito" % "mockito-scala_2.13" % "1.7.1"
 )
 parallelExecution in Test := false
