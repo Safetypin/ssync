@@ -4,7 +4,7 @@ package com.ssync.controllers
 import java.util.UUID
 
 import com.ssync.controllers.FileToolUtils._
-import com.ssync.models.{Settings, SettingSyncItem}
+import com.ssync.models.{SettingSyncItem, Settings}
 import spray.json.{JsArray, JsObject, JsString}
 
 object DataUtils {

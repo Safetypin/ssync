@@ -1,15 +1,15 @@
 package com.ssync.controllers
 
-import com.ssync.controllers.FileToolUtils.{getCurrentDirectory, getSeparator}
-import com.ssync.models.{SettingSyncItem, Settings}
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach, FlatSpec}
-import org.scalatest.Matchers._
 import com.ssync.controllers.DataUtils._
+import com.ssync.controllers.FileToolUtils.getSeparator
+import com.ssync.models.{SettingSyncItem, Settings}
+import org.scalatest.Matchers._
+import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach, FlatSpec}
 
 class SyncControllerTest extends FlatSpec
-with BeforeAndAfter
-with BeforeAndAfterEach
-with SyncController {
+  with BeforeAndAfter
+  with BeforeAndAfterEach
+  with SyncController {
   "convertSettingSyncItemsToSyncItems" should "an empty list when SettingSyncItems is empty" in {
     val settings =
       Settings(source,
@@ -33,7 +33,7 @@ with SyncController {
 
     val firstSyncItem = returnedSyncItems.head
     val secondSyncItem = returnedSyncItems.last
-    firstSyncItem.Name shouldEqual  "sub 1"
+    firstSyncItem.Name shouldEqual "sub 1"
     firstSyncItem.SourcePath shouldEqual s"$source$getSeparator$sub1path"
     firstSyncItem.DestinationPath shouldEqual s"$destination$getSeparator$sub1path"
     firstSyncItem.Extensions shouldEqual List("jpg")

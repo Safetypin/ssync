@@ -2,7 +2,7 @@ package com.ssync.controllers
 
 import java.io.File
 
-import com.ssync.models.{Settings, SettingSyncItem}
+import com.ssync.models.{SettingSyncItem, Settings}
 
 object FileToolUtils {
   val settingsPath = getCurrentDirectory + getSeparator + "settings.json"

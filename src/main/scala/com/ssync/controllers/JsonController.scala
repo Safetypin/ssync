@@ -6,11 +6,11 @@ import spray.json._
 
 trait JsonController {
 
-  def ConvertSettingsToJson(content: Settings): JsValue = {
+  def convertSettingsToJson(content: Settings): JsValue = {
     content.toJson
   }
 
-  def ConvertJsonToSettings(content: String): Settings = {
+  def convertJsonToSettings(content: String): Settings = {
     content.parseJson.convertTo[Settings]
   }
 }

@@ -11,7 +11,7 @@ trait SettingsController extends JsonController with FileToolsController {
 
   def loadSettings: Settings = {
     val fileSettingString = openAndReadSettings(settingsPath)
-    ConvertJsonToSettings(fileSettingString)
+    convertJsonToSettings(fileSettingString)
   }
 
   private def openAndReadSettings(filename: String): String = {
@@ -29,7 +29,7 @@ trait SettingsController extends JsonController with FileToolsController {
   }
 
   private def createSettingJson(filename: String): Try[String] = {
-    val json = ConvertSettingsToJson(defaultSettings)
+    val json = convertSettingsToJson(defaultSettings)
     Try {
       createFile(filename, json.toString)
     } match {

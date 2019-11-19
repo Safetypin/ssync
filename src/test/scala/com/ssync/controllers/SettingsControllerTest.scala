@@ -16,10 +16,6 @@ class SettingsControllerTest extends FlatSpec
   with BeforeAndAfterEach
   with MockitoSugar {
 
-  before {
-    //    fileToolsController
-  }
-
   "loadSettings" should "throw an exception if there is no settings file" in {
     val mockFileToolsController: FileToolsController = mock[FileToolsController]
 
