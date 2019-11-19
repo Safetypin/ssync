@@ -2,8 +2,8 @@ package com.ssync.controllers
 
 import java.io.FileNotFoundException
 
-import com.ssync.controllers.FileToolUtils._
 import com.ssync.controllers.DataUtils._
+import com.ssync.controllers.FileToolUtils._
 import com.ssync.models.SyncItem
 import org.mockito.MockitoSugar
 import org.scalatest.Matchers._

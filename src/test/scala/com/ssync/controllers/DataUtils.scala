@@ -16,7 +16,7 @@ object DataUtils {
     Seq(SyncItem("sub folder 1", "sub folder 1")))
   val testJSON = JsObject("source" -> JsString(source),
     "destination" -> JsString(destination), "extensions" -> JsArray(JsString("jpg")),
-      "syncItems" -> JsArray(JsObject("name" -> JsString("sub folder 1"), "path" -> JsString("sub folder 1"))))
+    "syncItems" -> JsArray(JsObject("name" -> JsString("sub folder 1"), "path" -> JsString("sub folder 1"))))
 
   def randomizeSettingsPath = {
     val randomString = UUID.randomUUID.toString.substring(0, 4)
