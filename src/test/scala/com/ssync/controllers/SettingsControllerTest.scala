@@ -3,7 +3,8 @@ package com.ssync.controllers
 import java.io.FileNotFoundException
 
 import com.ssync.controllers.FileToolUtils._
-import com.ssync.controllers.ItDataUtils._
+import com.ssync.controllers.DataUtils._
+import com.ssync.models.SyncItem
 import org.mockito.MockitoSugar
 import org.scalatest.Matchers._
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach, FlatSpec}
@@ -41,6 +42,9 @@ class SettingsControllerTest extends FlatSpec
     result.source.contains("source") shouldEqual true
     result.destination.contains("destination") shouldEqual true
     result.extensions shouldEqual Array("jpg")
+    result.syncItems.length shouldEqual 1
+    val syncItem = result.syncItems.head
+    syncItem shouldEqual SyncItem("sub folder 1", "sub folder 1")
   }
 
 }
