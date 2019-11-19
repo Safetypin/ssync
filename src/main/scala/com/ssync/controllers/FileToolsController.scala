@@ -7,13 +7,9 @@ import com.ssync.controllers.FileToolUtils._
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
-class FileToolsController {
+trait FileToolsController {
 
   def createDestination(rootDestination: String, parentDestination: String) = rootDestination + getSeparator + parentDestination
-
-  private def readFile(stream: FileInputStream): Try[String] = {
-    Try(Source.fromInputStream(stream).mkString)
-  }
 
   def createFile(filename: String, settings: String) = {
     val file = new File(filename)
@@ -27,5 +23,9 @@ class FileToolsController {
       case Success(stream) => readFile(stream)
       case Failure(exception) => Failure(exception)
     }
+  }
+
+  private def readFile(stream: FileInputStream): Try[String] = {
+    Try(Source.fromInputStream(stream).mkString)
   }
 }

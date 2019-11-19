@@ -7,29 +7,20 @@ import com.ssync.models.Settings
 
 import scala.util.{Failure, Success, Try}
 
-trait SettingsController extends JsonController {
+trait SettingsController extends JsonController with FileToolsController {
 
-  val fileToolsController: FileToolsController
-  private def createSettingJson(filename: String): Try[String] = {
-    val json = ConvertSettingsToJson(defaultSettings)
-    Try {
-      fileToolsController createFile(filename, json.toString)
-    } match {
-      case Failure(err) => Failure(err)
-      case _ => Success(s"Created setting file $filename")
-    }
+  def loadSettings: Settings = {
+    val fileSettingString = openAndReadSettings(settingsPath)
+    ConvertJsonToSettings(fileSettingString)
   }
 
   private def openAndReadSettings(filename: String): String = {
-    val aFile = fileToolsController openAndReadFile(filename)
-    println("open and read file")
-   aFile match {
+    val aFile = openAndReadFile(filename)
+    aFile match {
       case Failure(exception) =>
         exception match {
-          case e: FileNotFoundException =>
-            println("can't find file and create json file")
+          case exception: FileNotFoundException =>
             createSettingJson(filename)
-            println("Settings file has just been created, please configure the source and destination paths")
             throw new FileNotFoundException("Settings file has just been created, please configure the source and destination paths")
           case _ => throw exception
         }
@@ -37,9 +28,13 @@ trait SettingsController extends JsonController {
     }
   }
 
-  def loadSettings: Settings = {
-    val fileSettingString = openAndReadSettings(settingsPath)
-    ConvertJsonToSettings (fileSettingString)
+  private def createSettingJson(filename: String): Try[String] = {
+    val json = ConvertSettingsToJson(defaultSettings)
+    Try {
+      createFile(filename, json.toString)
+    } match {
+      case Failure(err) => Failure(err)
+      case _ => Success(s"Created setting file $filename")
+    }
   }
-
 }

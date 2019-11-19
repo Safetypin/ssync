@@ -1,6 +1,6 @@
 package com.ssync.controllers
 
-import com.ssync.controllers.DataUtils._
+import com.ssync.controllers.ItDataUtils._
 import org.scalatest.Matchers._
 import org.scalatest._
 

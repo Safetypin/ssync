@@ -7,7 +7,7 @@ import com.ssync.controllers.FileToolUtils._
 import com.ssync.models.Settings
 import spray.json.{JsArray, JsObject, JsString}
 
-object DataUtils {
+object ItDataUtils {
 
   val source = getClass.getResource(getSeparator + "source").getPath
   val destination = getClass.getResource(getSeparator + "destination").getPath
