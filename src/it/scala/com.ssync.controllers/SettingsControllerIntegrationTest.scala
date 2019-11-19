@@ -15,6 +15,14 @@ class SettingsControllerIntegrationTest extends FlatSpec
     deleteSettings(settingsPath)
   }
 
+  override def beforeEach {
+    deleteSettings(settingsPath)
+  }
+
+  override def afterEach {
+    deleteSettings(settingsPath)
+  }
+
   "loadSettings" should "throw an exception if there is no settings file" in {
     intercept[FileNotFoundException](loadSettings)
   }
