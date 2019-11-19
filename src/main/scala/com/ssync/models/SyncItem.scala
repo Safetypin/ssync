@@ -1,6 +1,10 @@
 package com.ssync.models
 
 case class SyncItem(
-                     name: String,
-                     path: String
+                   Name: String,
+                   SourcePath: String,
+                   DestinationPath: String,
+                   Extensions: List[String],
+                   IgnoredExtensions: List[String],
+                   ProtectedFolders: List[String]
                    )

@@ -14,8 +14,8 @@ class JsonControllerTest extends FlatSpec
 
   "ConvertJsonToSettings" should "be able to convert JSON to PodcastSettings" in {
     val result = ConvertJsonToSettings(testJSON.toString)
-    result.destination shouldEqual defaultSettings.destination
-    result.source shouldBe defaultSettings.source
-    result.extensions shouldBe defaultSettings.extensions
+    result.Destination shouldEqual defaultSettings.Destination
+    result.Source shouldBe defaultSettings.Source
+    result.Extensions shouldBe defaultSettings.Extensions
   }
 }

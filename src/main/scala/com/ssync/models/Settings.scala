@@ -1,8 +1,8 @@
 package com.ssync.models
 
 case class Settings(
-                     source: String,
-                     destination: String,
-                     extensions: Array[String],
-                     syncItems: Seq[SyncItem]
+                     Source: String,
+                     Destination: String,
+                     Extensions: Array[String],
+                     SyncItems: Seq[SettingSyncItem]
                    )

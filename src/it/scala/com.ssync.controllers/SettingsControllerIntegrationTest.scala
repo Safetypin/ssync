@@ -30,9 +30,9 @@ class SettingsControllerIntegrationTest extends FlatSpec
     intercept[FileNotFoundException](loadSettings)
 
     val result = loadSettings
-    result.source.contains("source") shouldEqual true
-    result.destination.contains("destination") shouldEqual true
-    result.extensions shouldEqual Array("jpg")
+    result.Source.contains("source") shouldEqual true
+    result.Destination.contains("destination") shouldEqual true
+    result.Extensions shouldEqual Array("jpg")
   }
 
   def deleteSettings(settingsPath: String) = {

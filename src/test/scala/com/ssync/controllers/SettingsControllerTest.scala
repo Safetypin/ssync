@@ -4,7 +4,7 @@ import java.io.FileNotFoundException
 
 import com.ssync.controllers.DataUtils._
 import com.ssync.controllers.FileToolUtils._
-import com.ssync.models.SyncItem
+import com.ssync.models.SettingSyncItem
 import org.mockito.MockitoSugar
 import org.scalatest.Matchers._
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach, FlatSpec}
@@ -39,12 +39,12 @@ class SettingsControllerTest extends FlatSpec
     when(mockFileToolsController.openAndReadFile(settingsPath)) thenReturn Success(testJSON.toString)
 
     val result = settingsController.loadSettings
-    result.source.contains("source") shouldEqual true
-    result.destination.contains("destination") shouldEqual true
-    result.extensions shouldEqual Array("jpg")
-    result.syncItems.length shouldEqual 1
-    val syncItem = result.syncItems.head
-    syncItem shouldEqual SyncItem("sub folder 1", "sub folder 1")
+    result.Source.contains("source") shouldEqual true
+    result.Destination.contains("destination") shouldEqual true
+    result.Extensions shouldEqual Array("jpg")
+    result.SyncItems.length shouldEqual 1
+    val syncItem = result.SyncItems.head
+    syncItem shouldEqual SettingSyncItem("sub folder 1", "sub folder 1")
   }
 
 }
