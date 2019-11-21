@@ -20,6 +20,7 @@ libraryDependencies ++= Seq(
   "org.scalamock" %% "scalamock" % "4.4.0" % Test,
   "org.mockito" % "mockito-scala_2.13" % "1.7.1",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
+  "com.github.pathikrit" % "better-files_2.13" % "3.8.0"
 )
 parallelExecution in Test := false
