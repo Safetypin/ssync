@@ -50,4 +50,16 @@ class FileToolsControllerTest extends FlatSpec
     result.isFailure shouldEqual true
     result.failed.get.isInstanceOf[FileNotFoundException]
   }
+
+  "doesDirectoryExist" should "be return true if directory exists" in {
+    doesDirectoryExist(source) shouldEqual true
+  }
+  it should "be return false if directory does not exists" in {
+    doesDirectoryExist(s"$source$randomString") shouldEqual false
+  }
+  it should "be return false if file" in {
+    val randomFileName = randomizedDestinationFilePath
+    createFile(randomFileName,"test")
+    doesDirectoryExist(randomFileName) shouldEqual false
+  }
 }

@@ -33,7 +33,7 @@ trait FileToolsController extends LazyLogging {
     }
   }
 
-  def doesPathExist(path: String): Boolean = {
+  def doesDirectoryExist(path: String): Boolean = {
     val dir = new File(path)
     dir.exists && dir.isDirectory
   }

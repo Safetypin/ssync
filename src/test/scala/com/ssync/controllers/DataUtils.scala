@@ -19,14 +19,17 @@ object DataUtils {
     "Destination" -> JsString(destination), "Extensions" -> JsArray(JsString("jpg")),
     "SyncItems" -> JsArray(JsObject("Name" -> JsString("sub folder 1"), "Path" -> JsString("sub folder 1"))))
 
-  def randomizedDestinationFilePath = {
+  def randomString: String = {
     val randomString = UUID.randomUUID.toString.substring(0, 4)
+    randomString
+  }
+
+  def randomizedDestinationFilePath = {
     val filename = s"test_file_$randomString"
     s"$destination$getSeparator$filename"
   }
 
   def randomizedDestinationDirectoryFilePath = {
-    val randomString = UUID.randomUUID.toString.substring(0, 4)
     val filename = s"test_file_$randomString"
     s"$destination$randomString$getSeparator$filename"
   }
