@@ -1,21 +1,29 @@
 package com.ssync.controllers
 
 import java.io.{BufferedWriter, File, FileInputStream, FileWriter}
+import java.nio.file.FileAlreadyExistsException
 
 import com.ssync.controllers.FileToolUtils._
+import com.typesafe.scalalogging.LazyLogging
 
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
-trait FileToolsController {
+trait FileToolsController extends LazyLogging {
 
   def createDestination(rootDestination: String, parentDestination: String) = rootDestination + getSeparator + parentDestination
 
-  def createFile(filename: String, settings: String) = {
+  def createFile(filename: String, text: String) = {
+    if (doesFileExist(filename) equals false) {
     val file = new File(filename)
     val bw = new BufferedWriter(new FileWriter(file))
-    bw.write(settings)
+    bw.write(text)
     bw.close()
+  }
+    else {
+      logger.error(s"$filename already exists")
+      throw new FileAlreadyExistsException(filename)
+    }
   }
 
   def openAndReadFile(filename: String): Try[String] = {
@@ -23,6 +31,16 @@ trait FileToolsController {
       case Success(stream) => readFile(stream)
       case Failure(exception) => Failure(exception)
     }
+  }
+
+  def doesPathExist(path: String): Boolean = {
+    val dir = new File(path)
+    dir.exists && dir.isDirectory
+  }
+
+  def doesFileExist(path: String): Boolean ={
+    val file = new File(path)
+    file.exists && !file.isDirectory
   }
 
   private def readFile(stream: FileInputStream): Try[String] = {

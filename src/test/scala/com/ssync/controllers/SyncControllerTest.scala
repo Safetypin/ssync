@@ -42,7 +42,5 @@ class SyncControllerTest extends FlatSpec
     secondSyncItem.SourcePath shouldEqual s"$source$getSeparator$sub2path"
     secondSyncItem.DestinationPath shouldEqual s"$destination$getSeparator$sub2path"
     secondSyncItem.Extensions shouldEqual List("jpg")
-
-
   }
 }
