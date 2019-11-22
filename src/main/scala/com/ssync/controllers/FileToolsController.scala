@@ -16,15 +16,20 @@ trait FileToolsController extends LazyLogging {
 
   def createFile(filename: String, text: String) = {
     if (doesFileExist(filename) equals false) {
-    val file = new File(filename)
-    val bw = new BufferedWriter(new FileWriter(file))
-    bw.write(text)
-    bw.close()
-  }
+      val file = new File(filename)
+      val bw = new BufferedWriter(new FileWriter(file))
+      bw.write(text)
+      bw.close()
+    }
     else {
       logger.error(s"$filename already exists")
       throw new FileAlreadyExistsException(filename)
     }
+  }
+
+  def doesFileExist(path: String): Boolean = {
+    val file = new File(path)
+    file.exists && !file.isDirectory
   }
 
   def openAndReadFile(filename: String): Try[String] = {
@@ -34,14 +39,13 @@ trait FileToolsController extends LazyLogging {
     }
   }
 
+  private def readFile(stream: FileInputStream): Try[String] = {
+    Try(Source.fromInputStream(stream).mkString)
+  }
+
   def doesDirectoryExist(path: String): Boolean = {
     val dir = new File(path)
     dir.exists && dir.isDirectory
-  }
-
-  def doesFileExist(path: String): Boolean ={
-    val file = new File(path)
-    file.exists && !file.isDirectory
   }
 
   def collectFilesBasedOnExtensions(path: String, extensions: List[String]):
@@ -58,9 +62,5 @@ trait FileToolsController extends LazyLogging {
           .filter(_.extension(false, false, true) equals Some(ext))
       )
     }
-  }
-
-  private def readFile(stream: FileInputStream): Try[String] = {
-    Try(Source.fromInputStream(stream).mkString)
   }
 }

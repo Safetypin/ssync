@@ -15,25 +15,25 @@ class FileToolsControllerTest extends FlatSpec
 
   "createFile" should "be able to create a file" in {
     val randomFileName = randomizedDestinationFilePath
-    createFile(randomFileName,"")
+    createFile(randomFileName, "")
     doesFileExist(randomFileName) shouldEqual true
     deleteFile(randomFileName)
   }
   it should "throw an FileAlreadyExistsException if file already exist" in {
     val randomFileName = randomizedDestinationFilePath
-    createFile(randomFileName,"")
-    intercept[FileAlreadyExistsException](createFile(randomFileName,""))
+    createFile(randomFileName, "")
+    intercept[FileAlreadyExistsException](createFile(randomFileName, ""))
     deleteFile(randomFileName)
   }
   it should "throw an FileNotFoundException if directory doesn't exist" in {
     val randomFileName = randomizedDestinationDirectoryFilePath
-    intercept[FileNotFoundException](createFile(randomFileName,""))
+    intercept[FileNotFoundException](createFile(randomFileName, ""))
     deleteFile(randomFileName)
   }
 
   "openAndReadFile" should "be able to read text file" in {
     val randomFileName = randomizedDestinationFilePath
-    createFile(randomFileName,"test")
+    createFile(randomFileName, "test")
     val result = openAndReadFile(randomFileName)
     result.isSuccess shouldEqual true
     result.get shouldEqual "test"
@@ -58,7 +58,7 @@ class FileToolsControllerTest extends FlatSpec
   }
   it should "be return false if file" in {
     val randomFileName = randomizedDestinationFilePath
-    createFile(randomFileName,"test")
+    createFile(randomFileName, "test")
     doesDirectoryExist(randomFileName) shouldEqual false
   }
 

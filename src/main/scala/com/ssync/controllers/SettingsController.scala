@@ -4,7 +4,7 @@ import java.io.FileNotFoundException
 
 import com.ssync.controllers.FileToolUtils._
 import com.ssync.models.Settings
-import com.typesafe.scalalogging.{LazyLogging, Logger}
+import com.typesafe.scalalogging.LazyLogging
 
 import scala.util.{Failure, Success, Try}
 
