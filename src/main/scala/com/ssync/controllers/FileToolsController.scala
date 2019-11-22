@@ -3,6 +3,7 @@ package com.ssync.controllers
 import java.io.{BufferedWriter, File, FileInputStream, FileWriter}
 import java.nio.file.FileAlreadyExistsException
 
+import better.files.{File => BFile}
 import com.ssync.controllers.FileToolUtils._
 import com.typesafe.scalalogging.LazyLogging
 
@@ -41,6 +42,20 @@ trait FileToolsController extends LazyLogging {
   def doesFileExist(path: String): Boolean ={
     val file = new File(path)
     file.exists && !file.isDirectory
+  }
+
+  def collectFilesBasedOnExtensions(path: String, extensions: List[String]):
+  List[BFile] = {
+    val directory = BFile(path)
+    extensions.contains("*") match {
+      case true => directory
+        .list.toList
+      case false => extensions.flatMap(
+        ext => directory
+          .list
+          .filter(_.extension(false, false, true) equals Some(ext))
+      )
+    }
   }
 
   private def readFile(stream: FileInputStream): Try[String] = {

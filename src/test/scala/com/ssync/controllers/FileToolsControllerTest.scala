@@ -3,11 +3,10 @@ package com.ssync.controllers
 import java.io.FileNotFoundException
 import java.nio.file.FileAlreadyExistsException
 
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach, FlatSpec}
 import com.ssync.controllers.DataUtils._
+import com.ssync.controllers.FileToolUtils._
 import org.scalatest.Matchers._
-
-import scala.util.Failure
+import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach, FlatSpec}
 
 class FileToolsControllerTest extends FlatSpec
   with BeforeAndAfter
@@ -61,5 +60,48 @@ class FileToolsControllerTest extends FlatSpec
     val randomFileName = randomizedDestinationFilePath
     createFile(randomFileName,"test")
     doesDirectoryExist(randomFileName) shouldEqual false
+  }
+
+  "collectFilesBasedOnExtensions" should "return 1 txt file based on txt extension" in {
+    val subFolder1 = s"$source$getSeparator" + "sub 1"
+    val returnedFiles = collectFilesBasedOnExtensions(subFolder1, List("txt"))
+    returnedFiles.isEmpty shouldEqual false
+    returnedFiles.length shouldEqual 1
+    returnedFiles.head.name shouldEqual "first.txt"
+  }
+  it should "return 1 txt and 1 TXT file based on txt extension" in {
+    val subFolder2 = s"$source$getSeparator" + "sub 2"
+    val returnedFiles = collectFilesBasedOnExtensions(subFolder2, List("txt"))
+    returnedFiles.isEmpty shouldEqual false
+    returnedFiles.length shouldEqual 2
+    returnedFiles.exists(f => f.name.equals("first.txt")) shouldEqual true
+    returnedFiles.exists(f => f.name.equals("second.TXT")) shouldEqual true
+  }
+  it should "return 1 txt, 1 TXT and 1 jpg file based on txt, jpg extension" in {
+    val subFolder2 = s"$source$getSeparator" + "sub 2"
+    val returnedFiles = collectFilesBasedOnExtensions(subFolder2, List("txt", "jpg"))
+    returnedFiles.isEmpty shouldEqual false
+    returnedFiles.length shouldEqual 3
+    returnedFiles.exists(f => f.name.equals("first.txt")) shouldEqual true
+    returnedFiles.exists(f => f.name.equals("second.TXT")) shouldEqual true
+    returnedFiles.exists(f => f.name.equals("test.jpg")) shouldEqual true
+  }
+  it should "return 1 txt, 1 TXT and 1 jpg file based on * extension" in {
+    val subFolder2 = s"$source$getSeparator" + "sub 2"
+    val returnedFiles = collectFilesBasedOnExtensions(subFolder2, List("*"))
+    returnedFiles.isEmpty shouldEqual false
+    returnedFiles.length shouldEqual 3
+    returnedFiles.exists(f => f.name.equals("first.txt")) shouldEqual true
+    returnedFiles.exists(f => f.name.equals("second.TXT")) shouldEqual true
+    returnedFiles.exists(f => f.name.equals("test.jpg")) shouldEqual true
+  }
+  it should "return 1 txt, 1 TXT and 1 jpg file based on * in a list of extensions" in {
+    val subFolder2 = s"$source$getSeparator" + "sub 2"
+    val returnedFiles = collectFilesBasedOnExtensions(subFolder2, List("*", "txt"))
+    returnedFiles.isEmpty shouldEqual false
+    returnedFiles.length shouldEqual 3
+    returnedFiles.exists(f => f.name.equals("first.txt")) shouldEqual true
+    returnedFiles.exists(f => f.name.equals("second.TXT")) shouldEqual true
+    returnedFiles.exists(f => f.name.equals("test.jpg")) shouldEqual true
   }
 }
