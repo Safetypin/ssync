@@ -2,8 +2,9 @@ package com.ssync.controllers
 
 import java.io.FileNotFoundException
 
+import better.files.File
 import com.ssync.controllers.FileToolUtils._
-import com.ssync.models.{Settings, SyncItem}
+import com.ssync.models.{Settings, SyncFileItem, SyncItem}
 import com.typesafe.scalalogging.LazyLogging
 
 import scala.util.Try
@@ -36,12 +37,22 @@ trait SyncController extends LazyLogging with FileToolsController {
     val source = syncItem.SourcePath
     Try {
       doesSourceExist(source)
-      val syncItemFiles = collectFilesBasedOnExtensions(source, syncItem.Extensions)
+      val files = collectFilesBasedOnExtensions(source, syncItem.Extensions)
+      val syncFileItems = files.map {
+        constructSyncItemFileWithDestination(syncItem,_)
+      }
+      moveFiles(syncFileItems)
       //TODO does destination exist
       //TODO if filtered files exist and destination doesn't exist create destination
       //TODO move files
       syncItem
     }
+  }
+
+  def constructSyncItemFileWithDestination(syncItem: SyncItem, file: File) = {
+    val destination = file.parent.canonicalPath.replace(syncItem.SourcePath, syncItem.DestinationPath)
+    val syncFileItem = SyncFileItem(file, File(destination))
+    syncFileItem
   }
 
   private def doesSourceExist(source: String) = {

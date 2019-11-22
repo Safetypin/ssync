@@ -1,8 +1,9 @@
 package com.ssync.controllers
 
+import better.files.File
 import com.ssync.controllers.DataUtils._
 import com.ssync.controllers.FileToolUtils.getSeparator
-import com.ssync.models.{SettingSyncItem, Settings}
+import com.ssync.models.{SettingSyncItem, Settings, SyncItem}
 import org.scalatest.Matchers._
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach, FlatSpec}
 
@@ -42,5 +43,19 @@ class SyncControllerTest extends FlatSpec
     secondSyncItem.SourcePath shouldEqual s"$source$getSeparator$sub2path"
     secondSyncItem.DestinationPath shouldEqual s"$destination$getSeparator$sub2path"
     secondSyncItem.Extensions shouldEqual List("jpg")
+  }
+
+  "constructSyncItemFileWithDestination" should "populate destination" in {
+    val file = File(s"$source$getSeparator" + "testfile.txt")
+    val syncItem = SyncItem("test", source, destination, List("*"), List(""), List(""))
+    val syncFileItem = constructSyncItemFileWithDestination(syncItem, file)
+    syncFileItem.Destination shouldEqual File(destination)
+  }
+  it should "populate destination of sub folder" in {
+    val file = File(s"$source$getSeparator" + "sub 1" + getSeparator + "firstj.jpg")
+    val subFolder = File(s"$destination$getSeparator" + "sub 1")
+    val syncItem = SyncItem("test", source, destination, List("*"), List(""), List(""))
+    val syncFileItem = constructSyncItemFileWithDestination(syncItem, file)
+    syncFileItem.Destination shouldEqual subFolder
   }
 }
