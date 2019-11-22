@@ -49,10 +49,12 @@ trait FileToolsController extends LazyLogging {
     val directory = BFile(path)
     extensions.contains("*") match {
       case true => directory
-        .list.toList
+        .listRecursively.filter(!_.isDirectory).toList
       case false => extensions.flatMap(
         ext => directory
-          .list
+          .listRecursively
+          .filter(!_.isDirectory)
+          .toList
           .filter(_.extension(false, false, true) equals Some(ext))
       )
     }

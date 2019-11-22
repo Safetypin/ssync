@@ -104,4 +104,28 @@ class FileToolsControllerTest extends FlatSpec
     returnedFiles.exists(f => f.name.equals("second.TXT")) shouldEqual true
     returnedFiles.exists(f => f.name.equals("test.jpg")) shouldEqual true
   }
+  it should "return 2 txt, 2 TXT and 2 jpg file based on * extension with a sub folder" in {
+    val subFolder3 = s"$source$getSeparator" + "sub 3"
+    val returnedFiles = collectFilesBasedOnExtensions(subFolder3, List("*", "txt"))
+    returnedFiles.isEmpty shouldEqual false
+    returnedFiles.length shouldEqual 6
+    returnedFiles.exists(f => f.name.equals("first.txt")) shouldEqual true
+    returnedFiles.filter(f => f.name.equals("first.txt")).length shouldEqual 2
+    returnedFiles.exists(f => f.name.equals("second.TXT")) shouldEqual true
+    returnedFiles.filter(f => f.name.equals("second.TXT")).length shouldEqual 2
+    returnedFiles.exists(f => f.name.equals("test.jpg")) shouldEqual true
+    returnedFiles.filter(f => f.name.equals("test.jpg")).length shouldEqual 2
+  }
+  it should "return 2 txt, 2 TXT and 2 jpg file based on txt, jpg extensions with a sub folder" in {
+    val subFolder3 = s"$source$getSeparator" + "sub 3"
+    val returnedFiles = collectFilesBasedOnExtensions(subFolder3, List("jpg", "txt"))
+    returnedFiles.isEmpty shouldEqual false
+    returnedFiles.length shouldEqual 6
+    returnedFiles.exists(f => f.name.equals("first.txt")) shouldEqual true
+    returnedFiles.filter(f => f.name.equals("first.txt")).length shouldEqual 2
+    returnedFiles.exists(f => f.name.equals("second.TXT")) shouldEqual true
+    returnedFiles.filter(f => f.name.equals("second.TXT")).length shouldEqual 2
+    returnedFiles.exists(f => f.name.equals("test.jpg")) shouldEqual true
+    returnedFiles.filter(f => f.name.equals("test.jpg")).length shouldEqual 2
+  }
 }
