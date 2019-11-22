@@ -5,6 +5,7 @@ import java.nio.file.FileAlreadyExistsException
 
 import better.files.{File => BFile}
 import com.ssync.controllers.FileToolUtils._
+import com.ssync.models.SyncFileItem
 import com.typesafe.scalalogging.LazyLogging
 
 import scala.io.Source
@@ -54,13 +55,30 @@ trait FileToolsController extends LazyLogging {
     extensions.contains("*") match {
       case true => directory
         .listRecursively.filter(!_.isDirectory).toList
-      case false => extensions.flatMap(
-        ext => directory
-          .listRecursively
+      case false =>
+        directory.listRecursively
           .filter(!_.isDirectory)
-          .toList
-          .filter(_.extension(false, false, true) equals Some(ext))
-      )
+          .filter(
+            file => {
+              val ext = file.extension(false, false, true).get
+              extensions.exists(_ == ext)
+            }
+          ).toList
+    }
+  }
+
+  def moveFiles(syncFileItems: List[SyncFileItem]) = {
+    syncFileItems.map {
+      item => moveFile(item) match {
+        case Success(file) => SyncFileItem(file, item.Destination)
+      }
+    }
+  }
+
+  private def moveFile(syncFileItem: SyncFileItem) = {
+    Try {
+      syncFileItem.Destination.createIfNotExists(asDirectory = true)
+      syncFileItem.FileItem.moveToDirectory(syncFileItem.Destination)
     }
   }
 }
