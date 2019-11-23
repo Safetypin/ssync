@@ -13,8 +13,8 @@ class SyncControllerTest extends FlatSpec
   with SyncController {
   "convertSettingSyncItemsToSyncItems" should "an empty list when SettingSyncItems is empty" in {
     val settings =
-      Settings(source,
-        destination,
+      Settings(sourcePath,
+        destinationPath,
         Array("jpg"),
         Seq())
     val returnedSyncItems = convertSettingSyncItemsToSyncItems(settings)
@@ -24,8 +24,8 @@ class SyncControllerTest extends FlatSpec
     val sub1path = "sub1"
     val sub2path = "sub2"
     val settings =
-      Settings(source,
-        destination,
+      Settings(sourcePath,
+        destinationPath,
         Array("jpg"),
         Seq(SettingSyncItem("sub 1", sub1path), SettingSyncItem("sub 2", sub2path)))
     val returnedSyncItems = convertSettingSyncItemsToSyncItems(settings)
@@ -35,26 +35,26 @@ class SyncControllerTest extends FlatSpec
     val firstSyncItem = returnedSyncItems.head
     val secondSyncItem = returnedSyncItems.last
     firstSyncItem.Name shouldEqual "sub 1"
-    firstSyncItem.SourcePath shouldEqual s"$source$getSeparator$sub1path"
-    firstSyncItem.DestinationPath shouldEqual s"$destination$getSeparator$sub1path"
+    firstSyncItem.SourcePath shouldEqual s"$sourcePath$getSeparator$sub1path"
+    firstSyncItem.DestinationPath shouldEqual s"$destinationPath$getSeparator$sub1path"
     firstSyncItem.Extensions shouldEqual List("jpg")
 
     secondSyncItem.Name shouldEqual "sub 2"
-    secondSyncItem.SourcePath shouldEqual s"$source$getSeparator$sub2path"
-    secondSyncItem.DestinationPath shouldEqual s"$destination$getSeparator$sub2path"
+    secondSyncItem.SourcePath shouldEqual s"$sourcePath$getSeparator$sub2path"
+    secondSyncItem.DestinationPath shouldEqual s"$destinationPath$getSeparator$sub2path"
     secondSyncItem.Extensions shouldEqual List("jpg")
   }
 
   "constructSyncItemFileWithDestination" should "populate destination" in {
-    val file = File(s"$source$getSeparator" + "testfile.txt")
-    val syncItem = SyncItem("test", source, destination, List("*"), List(""), List(""))
+    val file = File(s"$sourcePath$getSeparator" + "testfile.txt")
+    val syncItem = SyncItem("test", sourcePath, destinationPath, List("*"), List(""), List(""))
     val syncFileItem = constructSyncItemFileWithDestination(syncItem, file)
-    syncFileItem.Destination shouldEqual File(destination)
+    syncFileItem.Destination shouldEqual File(destinationPath)
   }
   it should "populate destination of sub folder" in {
-    val file = File(s"$source$getSeparator" + "sub 1" + getSeparator + "firstj.jpg")
-    val subFolder = File(s"$destination$getSeparator" + "sub 1")
-    val syncItem = SyncItem("test", source, destination, List("*"), List(""), List(""))
+    val file = File(s"$sourcePath$getSeparator" + "sub 1" + getSeparator + "firstj.jpg")
+    val subFolder = File(s"$destinationPath$getSeparator" + "sub 1")
+    val syncItem = SyncItem("test", sourcePath, destinationPath, List("*"), List(""), List(""))
     val syncFileItem = constructSyncItemFileWithDestination(syncItem, file)
     syncFileItem.Destination shouldEqual subFolder
   }

@@ -10,6 +10,7 @@ import com.typesafe.scalalogging.LazyLogging
 
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
+import com.ssync.models.FileState._
 
 trait FileToolsController extends LazyLogging {
 
@@ -67,18 +68,45 @@ trait FileToolsController extends LazyLogging {
     }
   }
 
+
+
   def moveFiles(syncFileItems: List[SyncFileItem]) = {
     syncFileItems.map {
-      item => moveFile(item) match {
-        case Success(file) => SyncFileItem(file, item.Destination)
-      }
+      item =>
+        moveFile(item) match {
+          case Success(file) => SyncFileItem(file, item.Destination, MOVED, None)
+          case Failure(error) =>
+            logger.error(error.getMessage)
+            SyncFileItem(item.FileItem, item.Destination, UNABLE_TO_MOVE, Some(error))
+        }
     }
   }
 
-  private def moveFile(syncFileItem: SyncFileItem) = {
-    Try {
-      syncFileItem.Destination.createIfNotExists(asDirectory = true)
-      syncFileItem.FileItem.moveToDirectory(syncFileItem.Destination)
+  def renameFileBecauseItAlreadyExists(syncFileItem: SyncFileItem) = {
+    val file = syncFileItem.FileItem
+    val name = file.nameWithoutExtension
+    val extension = file.extension(true)
+    val renamed = name + "_" + randomString + extension.get
+    val renamedFile = file.renameTo(renamed)
+    logger.error(s"Renaming file from $name to $renamed")
+    SyncFileItem(renamedFile, syncFileItem.Destination, RENAMED, None)
+  }
+
+  private def moveFile(syncFileItem: SyncFileItem): Try[BFile] = {
+    doesSyncFileItemFileExist(syncFileItem) match {
+      case false =>
+        Try {
+          syncFileItem.Destination.createIfNotExists(asDirectory = true)
+          syncFileItem.FileItem.moveToDirectory(syncFileItem.Destination)
+        }
+      case true =>
+        val renamedSyncFileItem = renameFileBecauseItAlreadyExists(syncFileItem)
+        moveFile(renamedSyncFileItem)
     }
+  }
+
+  private def doesSyncFileItemFileExist(syncFileItem: SyncFileItem) = {
+    val path = syncFileItem.Destination + getSeparator + syncFileItem.FileItem.name
+    doesFileExist(path)
   }
 }

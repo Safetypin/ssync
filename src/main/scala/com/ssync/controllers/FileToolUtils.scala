@@ -1,6 +1,7 @@
 package com.ssync.controllers
 
 import java.io.File
+import java.util.UUID
 
 import com.ssync.models.{SettingSyncItem, Settings}
 
@@ -21,4 +22,8 @@ object FileToolUtils {
 
   def getSeparator = File.separator
 
+  def randomString: String = {
+    val randomString = UUID.randomUUID.toString.substring(0, 4)
+    randomString
+  }
 }
