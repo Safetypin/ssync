@@ -5,12 +5,12 @@ import java.nio.file.FileAlreadyExistsException
 
 import better.files.{File => BFile}
 import com.ssync.controllers.FileToolUtils._
+import com.ssync.models.FileState._
 import com.ssync.models.SyncFileItem
 import com.typesafe.scalalogging.LazyLogging
 
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
-import com.ssync.models.FileState._
 
 trait FileToolsController extends LazyLogging {
 
@@ -99,7 +99,7 @@ trait FileToolsController extends LazyLogging {
         file => {
           val name = file.name
           protectedDirectories.exists(_ == name)
-          }
+        }
       )
       .toList
       .sorted(BFile.Order.byName).reverse
@@ -113,9 +113,9 @@ trait FileToolsController extends LazyLogging {
   }
 
   private def deleteEmptySourceDirectory(directory: BFile): Unit = {
-      if (directory.isEmpty) {
-        directory.delete()
-      }
+    if (directory.isEmpty) {
+      directory.delete()
+    }
   }
 
   private def moveFile(syncFileItem: SyncFileItem): Try[BFile] = {

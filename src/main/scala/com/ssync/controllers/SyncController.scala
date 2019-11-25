@@ -25,12 +25,12 @@ trait SyncController extends LazyLogging with FileToolsController {
     mergeParentPathWithSyncItemPath(settings.Source, syncItemPath)
   }
 
-  private def mergeDestinationPathWithSyncItemPath(settings: Settings, syncItemPath: String) = {
-    mergeParentPathWithSyncItemPath(settings.Destination, syncItemPath)
-  }
-
   private def mergeParentPathWithSyncItemPath(parentPath: String, syncItemPath: String) = {
     parentPath + getSeparator + syncItemPath
+  }
+
+  private def mergeDestinationPathWithSyncItemPath(settings: Settings, syncItemPath: String) = {
+    mergeParentPathWithSyncItemPath(settings.Destination, syncItemPath)
   }
 
   def processSyncItem(syncItem: SyncItem): Try[SyncItem] = {
@@ -39,7 +39,7 @@ trait SyncController extends LazyLogging with FileToolsController {
       doesSourceExist(source)
       val files = collectFilesBasedOnExtensions(source, syncItem.Extensions)
       val syncFileItems = files.map {
-        constructSyncItemFileWithDestination(syncItem,_)
+        constructSyncItemFileWithDestination(syncItem, _)
       }
       val movedSyncFileItems = moveFiles(syncFileItems)
       SyncItem(
@@ -53,27 +53,24 @@ trait SyncController extends LazyLogging with FileToolsController {
     }
   }
 
-  def cleanSyncItemSource(syncItem: SyncItem) = {
-    val source = syncItem.SourcePath
-    val protectedDirectories = syncItem.ProtectedDirectories
-    Try {
-      val directories = collectSourceDirectoriesInOrder(source, protectedDirectories)
-    }
-  }
-
-
   def constructSyncItemFileWithDestination(syncItem: SyncItem, file: File) = {
     val destination = file.parent.canonicalPath.replace(syncItem.SourcePath, syncItem.DestinationPath)
     val syncFileItem = SyncFileItem(file, File(destination))
     syncFileItem
   }
 
-
-
   private def doesSourceExist(source: String) = {
     if (doesDirectoryExist(source) equals false) {
       logger.error(s"Source destination: $source does not exist")
       throw new FileNotFoundException
+    }
+  }
+
+  def cleanSyncItemSource(syncItem: SyncItem) = {
+    val source = syncItem.SourcePath
+    val protectedDirectories = syncItem.ProtectedDirectories
+    Try {
+      val directories = collectSourceDirectoriesInOrder(source, protectedDirectories)
     }
   }
 }

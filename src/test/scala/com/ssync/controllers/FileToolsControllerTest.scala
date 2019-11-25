@@ -7,7 +7,7 @@ import better.files.File
 import com.ssync.controllers.DataUtils._
 import com.ssync.controllers.FileToolUtils._
 import com.ssync.models.FileState._
-import com.ssync.models.{SyncFileItem, SyncItem}
+import com.ssync.models.SyncFileItem
 import org.scalatest.Matchers._
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach, FlatSpec}
 
@@ -39,7 +39,7 @@ class FileToolsControllerTest extends FlatSpec
   it should "throw an FileNotFoundException if directory doesn't exist" in {
     val randomFileName = randomizedDestinationDirectoryFilePath
     intercept[FileNotFoundException](createFile(randomFileName, ""))
-//    deleteFile(randomFileName)
+    //    deleteFile(randomFileName)
   }
 
   "openAndReadFile" should "be able to read text file" in {
