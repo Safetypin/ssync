@@ -30,10 +30,10 @@ object ItDataUtils {
     "IgnoredExtensions" -> JsArray(JsString("")),
     "SyncItems" -> JsArray(
       JsObject(
-      "Name" -> JsString("sub folder 1"),
-      "Path" -> JsString("sub folder 1"),
+        "Name" -> JsString("sub folder 1"),
+        "Path" -> JsString("sub folder 1"),
         "ProtectedDirectories" -> JsArray(JsString(""))
-    )
+      )
     )
   )
 

@@ -20,10 +20,10 @@ object DataUtils {
     Array(""),
     Seq(
       SettingSyncItem(
-      "sub folder 1",
-      "sub folder 1",
-      Array("")
-    )
+        "sub folder 1",
+        "sub folder 1",
+        Array("")
+      )
     )
   )
   val testJSON = JsObject(
