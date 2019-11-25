@@ -8,9 +8,19 @@ import com.ssync.models.{SettingSyncItem, Settings}
 object FileToolUtils {
   val settingsPath = getCurrentDirectory + getSeparator + "settings.json"
   val defaultSettings =
-    Settings(getCurrentDirectory + getSeparator + "source",
-      getCurrentDirectory + getSeparator + "destination", Array("jpg")
-      , Seq(SettingSyncItem("sub folder 1", "sub folder 1")))
+    Settings(
+      getCurrentDirectory + getSeparator + "source",
+      getCurrentDirectory + getSeparator + "destination",
+      Array("jpg"),
+      Array(""),
+      Seq(
+        SettingSyncItem(
+          "sub folder 1",
+          "sub folder 1",
+          Array("")
+        )
+      )
+    )
 
   def getCurrentDirectory = new File(jarDir).toString
 

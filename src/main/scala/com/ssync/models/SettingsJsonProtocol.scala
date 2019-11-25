@@ -4,5 +4,5 @@ import com.ssync.models.SettingSyncItemJsonProtocol._
 import spray.json.DefaultJsonProtocol
 
 object SettingsJsonProtocol extends DefaultJsonProtocol {
-  implicit val settingsFormat = jsonFormat4(Settings)
+  implicit val settingsFormat = jsonFormat5(Settings)
 }

@@ -5,7 +5,7 @@ case class SyncItem(
                      SourcePath: String,
                      DestinationPath: String,
                      Extensions: List[String],
-                     IgnoredExtensions: List[String],
-                     ProtectedDirectories: List[String],
+                     IgnoredExtensions: List[String] = List(),
+                     ProtectedDirectories: List[String] = List(),
                      SyncFileItems: List[SyncFileItem] = List()
                    )

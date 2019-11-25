@@ -17,5 +17,7 @@ class JsonControllerTest extends FlatSpec
     result.Destination shouldEqual defaultSettings.Destination
     result.Source shouldBe defaultSettings.Source
     result.Extensions shouldBe defaultSettings.Extensions
+    result.IgnoredExtensions shouldEqual defaultSettings.IgnoredExtensions
+    result.SyncItems == defaultSettings.SyncItems
   }
 }

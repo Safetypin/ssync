@@ -16,6 +16,7 @@ class SyncControllerTest extends FlatSpec
       Settings(sourcePath,
         destinationPath,
         Array("jpg"),
+        Array(""),
         Seq())
     val returnedSyncItems = convertSettingSyncItemsToSyncItems(settings)
     returnedSyncItems.isEmpty shouldEqual true
@@ -27,7 +28,9 @@ class SyncControllerTest extends FlatSpec
       Settings(sourcePath,
         destinationPath,
         Array("jpg"),
-        Seq(SettingSyncItem("sub 1", sub1path), SettingSyncItem("sub 2", sub2path)))
+        Array(""),
+        Seq(SettingSyncItem("sub 1", sub1path, Array("")),
+          SettingSyncItem("sub 2", sub2path, Array(""))))
     val returnedSyncItems = convertSettingSyncItemsToSyncItems(settings)
     returnedSyncItems.isEmpty shouldEqual false
     returnedSyncItems.length shouldEqual 2

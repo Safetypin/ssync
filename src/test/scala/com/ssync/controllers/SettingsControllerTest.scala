@@ -38,9 +38,13 @@ class SettingsControllerTest extends FlatSpec
     result.Source.contains("source") shouldEqual true
     result.Destination.contains("destination") shouldEqual true
     result.Extensions shouldEqual Array("jpg")
+    result.IgnoredExtensions shouldEqual Array("")
     result.SyncItems.length shouldEqual 1
     val syncItem = result.SyncItems.head
-    syncItem shouldEqual SettingSyncItem("sub folder 1", "sub folder 1")
+    syncItem == SettingSyncItem(
+      "sub folder 1",
+      "sub folder 1",
+      Array(""))
   }
 
 }

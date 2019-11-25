@@ -13,11 +13,32 @@ object DataUtils {
   val sourcePath = getClass.getResource(getSeparator + "source").getPath
   val destinationPath = getClass.getResource(getSeparator + "destination").getPath
 
-  val defaultSettings: Settings = Settings(sourcePath, destinationPath, Array("jpg"),
-    Seq(SettingSyncItem("sub folder 1", "sub folder 1")))
-  val testJSON = JsObject("Source" -> JsString(sourcePath),
-    "Destination" -> JsString(destinationPath), "Extensions" -> JsArray(JsString("jpg")),
-    "SyncItems" -> JsArray(JsObject("Name" -> JsString("sub folder 1"), "Path" -> JsString("sub folder 1"))))
+  val defaultSettings: Settings = Settings(
+    sourcePath,
+    destinationPath,
+    Array("jpg"),
+    Array(""),
+    Seq(
+      SettingSyncItem(
+      "sub folder 1",
+      "sub folder 1",
+      Array("")
+    )
+    )
+  )
+  val testJSON = JsObject(
+    "Source" -> JsString(sourcePath),
+    "Destination" -> JsString(destinationPath),
+    "Extensions" -> JsArray(JsString("jpg")),
+    "IgnoredExtensions" -> JsArray(JsString("")),
+    "SyncItems" -> JsArray(
+      JsObject(
+        "Name" -> JsString("sub folder 1"),
+        "Path" -> JsString("sub folder 1"),
+        "ProtectedDirectories" -> JsArray(JsString(""))
+      )
+    )
+  )
   private val sourceCopyPath = sourcePath + "copy"
   private val destinationCopyPath = destinationPath + "copy"
   private val sourceCopy = File(sourceCopyPath)

@@ -12,13 +12,16 @@ import scala.util.Try
 trait SyncController extends LazyLogging with FileToolsController {
   def convertSettingSyncItemsToSyncItems(settings: Settings): Seq[SyncItem] = {
     val settingSyncItems = settings.SyncItems
-    settingSyncItems.map(item => SyncItem(
-      item.Name,
-      mergeSourcePathWithSyncItemPath(settings, item.Path),
-      mergeDestinationPathWithSyncItemPath(settings, item.Path),
-      settings.Extensions.toList,
-      List(""),
-      List("")))
+    settingSyncItems.map(item =>
+      SyncItem(
+        Name = item.Name,
+        SourcePath = mergeSourcePathWithSyncItemPath(settings, item.Path),
+        DestinationPath = mergeDestinationPathWithSyncItemPath(settings, item.Path),
+        Extensions = settings.Extensions.toList,
+        IgnoredExtensions = settings.IgnoredExtensions.toList,
+        ProtectedDirectories = item.ProtectedDirectories.toList
+      )
+    )
   }
 
   private def mergeSourcePathWithSyncItemPath(settings: Settings, syncItemPath: String) = {
