@@ -48,16 +48,27 @@ trait SyncController extends LazyLogging with FileToolsController {
         syncItem.DestinationPath,
         syncItem.Extensions,
         syncItem.IgnoredExtensions,
-        syncItem.ProtectedFolders,
+        syncItem.ProtectedDirectories,
         movedSyncFileItems)
     }
   }
+
+  def cleanSyncItemSource(syncItem: SyncItem) = {
+    val source = syncItem.SourcePath
+    val protectedDirectories = syncItem.ProtectedDirectories
+    Try {
+      val directories = collectSourceDirectoriesInOrder(source, protectedDirectories)
+    }
+  }
+
 
   def constructSyncItemFileWithDestination(syncItem: SyncItem, file: File) = {
     val destination = file.parent.canonicalPath.replace(syncItem.SourcePath, syncItem.DestinationPath)
     val syncFileItem = SyncFileItem(file, File(destination))
     syncFileItem
   }
+
+
 
   private def doesSourceExist(source: String) = {
     if (doesDirectoryExist(source) equals false) {

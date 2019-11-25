@@ -6,6 +6,6 @@ case class SyncItem(
                      DestinationPath: String,
                      Extensions: List[String],
                      IgnoredExtensions: List[String],
-                     ProtectedFolders: List[String],
+                     ProtectedDirectories: List[String],
                      SyncFileItems: List[SyncFileItem] = List()
                    )

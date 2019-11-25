@@ -189,4 +189,58 @@ class FileToolsControllerTest extends FlatSpec
     renamedFileName should not equal fileName
     renamedFileName should include(fileName)
   }
+
+  "collectSourceDirectoriesInOrder" should "return all directories from source directory" in {
+    val sourceSubPath = s"$sourcePath$getSeparator" + "sub 4"
+
+    val returnedDir = collectSourceDirectoriesInOrder(sourceSubPath, List(""))
+    returnedDir.length shouldEqual 3
+    returnedDir.exists(f => f.name.equals("sub")) shouldEqual true
+    returnedDir.filter(f => f.name.equals("sub")).length shouldEqual 1
+    returnedDir.exists(f => f.name.equals("sub 1")) shouldEqual true
+    returnedDir.filter(f => f.name.equals("sub 1")).length shouldEqual 2
+  }
+  it should "return all directories from source directory excluding sub directory" in {
+    val sourceSubPath = s"$sourcePath$getSeparator" + "sub 4"
+
+    val returnedDir = collectSourceDirectoriesInOrder(sourceSubPath, List("sub"))
+    returnedDir.length shouldEqual 2
+    returnedDir.exists(f => f.name.equals("sub")) shouldEqual false
+    returnedDir.exists(f => f.name.equals("sub 1")) shouldEqual true
+    returnedDir.filter(f => f.name.equals("sub 1")).length shouldEqual 2
+  }
+  it should "return all directories from source directory excluding sub 1 directory" in {
+    val sourceSubPath = s"$sourcePath$getSeparator" + "sub 4"
+
+    val returnedDir = collectSourceDirectoriesInOrder(sourceSubPath, List("sub 1"))
+    returnedDir.length shouldEqual 1
+    returnedDir.exists(f => f.name.equals("sub 1")) shouldEqual false
+    returnedDir.exists(f => f.name.equals("sub")) shouldEqual true
+    returnedDir.filter(f => f.name.equals("sub")).length shouldEqual 1
+  }
+
+  "deleteEmptySourceDirectories" should "remove all empty sub folders in the correct order" in {
+    val sourceSubPath = s"$sourcePath$getSeparator" + "sub 5"
+    val filesToDelete = collectFilesBasedOnExtensions(sourceSubPath, List("*"))
+    filesToDelete.foreach(_.delete(true))
+
+    val returnedDir = collectSourceDirectoriesInOrder(sourceSubPath, List(""))
+    deleteEmptySourceDirectories(returnedDir)
+    val returnedDir2ndPass = collectSourceDirectoriesInOrder(sourceSubPath, List(""))
+    returnedDir2ndPass.isEmpty shouldEqual true
+  }
+  it should "remove all empty sub folders in the correct order except for " in {
+    val sourceSubPath = s"$sourcePath$getSeparator" + "sub 5"
+    val filesToDelete = collectFilesBasedOnExtensions(sourceSubPath, List("*"))
+    filesToDelete.foreach(_.delete(true))
+
+    val returnedDir = collectSourceDirectoriesInOrder(sourceSubPath, List("sub"))
+    deleteEmptySourceDirectories(returnedDir)
+    val returnedDir2ndPass = collectSourceDirectoriesInOrder(sourceSubPath, List(""))
+    returnedDir2ndPass.isEmpty shouldEqual false
+    returnedDir2ndPass.length shouldEqual 1
+    returnedDir2ndPass.exists(f => f.name.equals("sub")) shouldEqual true
+    returnedDir2ndPass.filter(f => f.name.equals("sub")).length shouldEqual 1
+  }
+
 }

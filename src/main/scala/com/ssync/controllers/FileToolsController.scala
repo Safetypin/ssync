@@ -68,8 +68,6 @@ trait FileToolsController extends LazyLogging {
     }
   }
 
-
-
   def moveFiles(syncFileItems: List[SyncFileItem]) = {
     syncFileItems.map {
       item =>
@@ -90,6 +88,34 @@ trait FileToolsController extends LazyLogging {
     val renamedFile = file.renameTo(renamed)
     logger.error(s"Renaming file from $name to $renamed")
     SyncFileItem(renamedFile, syncFileItem.Destination, RENAMED, None)
+  }
+
+  def collectSourceDirectoriesInOrder(path: String, protectedDirectories: List[String]): Seq[BFile] = {
+    val directory = BFile(path)
+    directory
+      .listRecursively
+      .filter(_.isDirectory)
+      .filterNot(
+        file => {
+          val name = file.name
+          protectedDirectories.exists(_ == name)
+          }
+      )
+      .toList
+      .sorted(BFile.Order.byName).reverse
+  }
+
+  def deleteEmptySourceDirectories(directories: Seq[BFile]) = {
+    directories
+      .foreach(dir => {
+        deleteEmptySourceDirectory(dir)
+      })
+  }
+
+  private def deleteEmptySourceDirectory(directory: BFile): Unit = {
+      if (directory.isEmpty) {
+        directory.delete()
+      }
   }
 
   private def moveFile(syncFileItem: SyncFileItem): Try[BFile] = {
