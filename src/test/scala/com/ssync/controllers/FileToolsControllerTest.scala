@@ -179,4 +179,14 @@ class FileToolsControllerTest extends FlatSpec
     results.MoveError shouldEqual None
     results.FileItem.parent.pathAsString shouldEqual destinationSubPath
   }
+
+  "renameFileBecauseItAlreadyExists" should "rename testfile.txt to testfile_XXXX.txt" in {
+    val file = File(s"$sourcePath$getSeparator" + "testfile.txt")
+    val fileName = "testfile"
+    val syncFileItem = SyncFileItem(file, File(destinationPath))
+    val result = renameFileBecauseItAlreadyExists(syncFileItem)
+    val renamedFileName = result.FileItem.nameWithoutExtension
+    renamedFileName should not equal fileName
+    renamedFileName should include(fileName)
+  }
 }
