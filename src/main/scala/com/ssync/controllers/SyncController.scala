@@ -41,11 +41,15 @@ trait SyncController extends LazyLogging with FileToolsController {
       val syncFileItems = files.map {
         constructSyncItemFileWithDestination(syncItem,_)
       }
-      moveFiles(syncFileItems)
-      //TODO does destination exist
-      //TODO if filtered files exist and destination doesn't exist create destination
-      //TODO move files
-      syncItem
+      val movedSyncFileItems = moveFiles(syncFileItems)
+      SyncItem(
+        syncItem.Name,
+        syncItem.SourcePath,
+        syncItem.DestinationPath,
+        syncItem.Extensions,
+        syncItem.IgnoredExtensions,
+        syncItem.ProtectedFolders,
+        movedSyncFileItems)
     }
   }
 
