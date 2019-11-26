@@ -24,18 +24,6 @@ trait SyncController extends LazyLogging with FileToolsController {
     )
   }
 
-  private def mergeSourcePathWithSyncItemPath(settings: Settings, syncItemPath: String) = {
-    mergeParentPathWithSyncItemPath(settings.Source, syncItemPath)
-  }
-
-  private def mergeParentPathWithSyncItemPath(parentPath: String, syncItemPath: String) = {
-    parentPath + getSeparator + syncItemPath
-  }
-
-  private def mergeDestinationPathWithSyncItemPath(settings: Settings, syncItemPath: String) = {
-    mergeParentPathWithSyncItemPath(settings.Destination, syncItemPath)
-  }
-
   def processSyncItem(syncItem: SyncItem): Try[SyncItem] = {
     val source = syncItem.SourcePath
     Try {
@@ -62,18 +50,30 @@ trait SyncController extends LazyLogging with FileToolsController {
     syncFileItem
   }
 
-  private def doesSourceExist(source: String) = {
-    if (doesDirectoryExist(source) equals false) {
-      logger.error(s"Source destination: $source does not exist")
-      throw new FileNotFoundException
-    }
-  }
-
   def cleanSyncItemSource(syncItem: SyncItem) = {
     val source = syncItem.SourcePath
     val protectedDirectories = syncItem.ProtectedDirectories
     Try {
       val directories = collectSourceDirectoriesInOrder(source, protectedDirectories)
+    }
+  }
+
+  private def mergeSourcePathWithSyncItemPath(settings: Settings, syncItemPath: String) = {
+    mergeParentPathWithSyncItemPath(settings.Source, syncItemPath)
+  }
+
+  private def mergeParentPathWithSyncItemPath(parentPath: String, syncItemPath: String) = {
+    parentPath + getSeparator + syncItemPath
+  }
+
+  private def mergeDestinationPathWithSyncItemPath(settings: Settings, syncItemPath: String) = {
+    mergeParentPathWithSyncItemPath(settings.Destination, syncItemPath)
+  }
+
+  private def doesSourceExist(source: String) = {
+    if (doesDirectoryExist(source) equals false) {
+      logger.error(s"Source destination: $source does not exist")
+      throw new FileNotFoundException
     }
   }
 }

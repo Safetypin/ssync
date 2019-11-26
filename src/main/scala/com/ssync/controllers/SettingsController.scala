@@ -23,6 +23,7 @@ trait SettingsController extends JsonController with FileToolsController with La
           case exception: FileNotFoundException =>
             logger.error("Settings file has just been created, please configure the source and destination paths")
             createSettingJson(filename)
+            logger.info(s"Settings file path $filename")
             throw new FileNotFoundException("Settings file has just been created, please configure the source and destination paths")
           case _ => throw exception
         }

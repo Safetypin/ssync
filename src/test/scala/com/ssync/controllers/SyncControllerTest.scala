@@ -1,16 +1,30 @@
 package com.ssync.controllers
 
+import java.io.FileNotFoundException
+
 import better.files.File
 import com.ssync.controllers.DataUtils._
 import com.ssync.controllers.FileToolUtils.getSeparator
+import com.ssync.models.FileState._
 import com.ssync.models.{SettingSyncItem, Settings, SyncItem}
 import org.scalatest.Matchers._
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach, FlatSpec}
+
+import scala.collection.View.Empty
 
 class SyncControllerTest extends FlatSpec
   with BeforeAndAfter
   with BeforeAndAfterEach
   with SyncController {
+
+  override def beforeEach {
+    setupTestResources
+  }
+
+  override def afterEach {
+    teardownTestResources
+  }
+
   "convertSettingSyncItemsToSyncItems" should "an empty list when SettingSyncItems is empty" in {
     val settings =
       Settings(sourcePath,
@@ -60,5 +74,95 @@ class SyncControllerTest extends FlatSpec
     val syncItem = SyncItem("test", sourcePath, destinationPath, List("*"), List(""), List(""))
     val syncFileItem = constructSyncItemFileWithDestination(syncItem, file)
     syncFileItem.Destination shouldEqual subFolder
+  }
+
+  "processSyncItem" should "handle a non existent directory with a FileNotFoundException Failure" in {
+    val subSourceDirectory = s"$sourcePath$getSeparator" + "sub1"
+    val subDestinationDirectory = s"$destinationPath$getSeparator" + "sub1"
+    val syncItem = SyncItem(
+      "sub folder 1",
+      subSourceDirectory,
+      subDestinationDirectory,
+      List("*"),
+      List(""),
+      List("")
+    )
+    val processedSyncItem = processSyncItem(syncItem)
+    processedSyncItem.isFailure shouldEqual true
+    processedSyncItem.failed.get.isInstanceOf[FileNotFoundException] shouldEqual true
+  }
+  it should "handle a a directory with no sub directories with a Success" in {
+    val subSourceDirectoryPath = s"$sourcePath$getSeparator" + "sub 1"
+    val subDestinationDirectoryPath = s"$destinationPath$getSeparator" + "sub 1"
+    val syncItem = SyncItem(
+      "sub folder 1",
+      subSourceDirectoryPath,
+      subDestinationDirectoryPath,
+      List("*"),
+      List(""),
+      List("")
+    )
+    val processedSyncItem = processSyncItem(syncItem)
+    processedSyncItem.isSuccess shouldEqual true
+    val subSourceDirectory = File(subSourceDirectoryPath)
+    subSourceDirectory.isEmpty shouldEqual true
+    val processedSyncFileItems = processedSyncItem.get.SyncFileItems
+    processedSyncFileItems.foreach(
+      item => item.State shouldEqual MOVED)
+  }
+  it should "handle all in a directory with sub directory with a Success" in {
+    val subSourceDirectoryPath = s"$sourcePath$getSeparator" + "sub 3"
+    val subDestinationDirectoryPath = s"$destinationPath$getSeparator" + "sub 3"
+    val syncItem = SyncItem(
+      "sub folder 1",
+      subSourceDirectoryPath,
+      subDestinationDirectoryPath,
+      List("*"),
+      List(""),
+      List("")
+    )
+    val processedSyncItem = processSyncItem(syncItem)
+    processedSyncItem.isSuccess shouldEqual true
+    val subSourceDirectory = File(subSourceDirectoryPath)
+    subSourceDirectory
+      .listRecursively
+        .filter(!_.isDirectory)
+      .toList shouldEqual List.empty
+    val processedSyncFileItems = processedSyncItem.get.SyncFileItems
+    processedSyncFileItems.length shouldEqual 6
+    processedSyncFileItems.foreach(
+      item => {
+        item.State shouldEqual MOVED
+        item.FileItem.exists shouldEqual true
+      }
+    )
+  }
+  it should "handle .txt in a directory with sub directory with a Success" in {
+    val subSourceDirectoryPath = s"$sourcePath$getSeparator" + "sub 3"
+    val subDestinationDirectoryPath = s"$destinationPath$getSeparator" + "sub 3"
+    val syncItem = SyncItem(
+      "sub folder 1",
+      subSourceDirectoryPath,
+      subDestinationDirectoryPath,
+      List("txt"),
+      List(""),
+      List("")
+    )
+    val processedSyncItem = processSyncItem(syncItem)
+    processedSyncItem.isSuccess shouldEqual true
+    val subSourceDirectory = File(subSourceDirectoryPath)
+    subSourceDirectory
+      .listRecursively
+      .filter(!_.isDirectory)
+      .toList.length shouldEqual 2
+    val processedSyncFileItems = processedSyncItem.get.SyncFileItems
+    processedSyncFileItems.length shouldEqual 4
+    processedSyncFileItems.foreach(
+      item => {
+        item.State shouldEqual MOVED
+        item.FileItem.exists shouldEqual true
+        item.FileItem.extension(false).get shouldEqual "txt"
+      }
+    )
   }
 }
