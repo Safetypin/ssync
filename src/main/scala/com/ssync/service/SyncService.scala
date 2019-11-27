@@ -13,15 +13,21 @@ trait SyncService extends
     val syncItems = convertSettingSyncItemsToSyncItems(settings)
     val processedSyncItems = syncItems.map(item => processSyncItem(item))
     val processedItems = processedSyncItems.length
-    val successfulProcessedItems = processedSyncItems.filter(_.isSuccess).length
-    val unsuccessfulProcessedItems = processedSyncItems.filter(_.isFailure).length
+    val successfulProcessedItems = processedSyncItems.count(_.isSuccess)
+    val unsuccessfulProcessedItems = processedSyncItems.count(_.isFailure)
 
     logger.info(s"$processedItems items processed.")
     logger.info(s"$successfulProcessedItems items successfully processed.")
     logger.info(s"$unsuccessfulProcessedItems items unsuccessfully processed.")
-    //    syncItems
-    //      .map(item => {
-    //        cleanSyncItemSource(item)
-    //      })
+    val cleanedItems = syncItems
+          .map(item => {
+            cleanSyncItemSource(item)
+          })
+    val processedCleanedItems = processedSyncItems.length
+    val successfulCleanedProcessedItems = cleanedItems.count(_.isSuccess)
+    val unsuccessfulCleanedProcessedItems = cleanedItems.count(_.isFailure)
+    logger.info(s"$processedCleanedItems items cleaned.")
+    logger.info(s"$successfulCleanedProcessedItems items successfully cleaned.")
+    logger.info(s"$unsuccessfulCleanedProcessedItems items unsuccessfully cleaned.")
   }
 }
