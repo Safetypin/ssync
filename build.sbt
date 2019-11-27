@@ -24,3 +24,4 @@ libraryDependencies ++= Seq(
   "com.github.pathikrit" % "better-files_2.13" % "3.8.0"
 )
 parallelExecution in Test := false
+parallelExecution in IntegrationTest := false

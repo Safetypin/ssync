@@ -2,6 +2,7 @@ package com.ssync.controllers
 
 
 import java.util.UUID
+
 import better.files.File
 import com.ssync.controllers.FileToolUtils._
 import com.ssync.models.{SettingSyncItem, Settings}
@@ -24,18 +25,6 @@ object ItDataUtils {
     )
   )
 
-  val exampleSettings: Settings = Settings(
-    sourcePath,
-    destinationPath,
-    Array("*"),
-    Array(),
-    Seq(SettingSyncItem(
-      "sub folder 1",
-      "sub1",
-      Array())
-    )
-  )
-
   val testJSON = JsObject(
     "Source" -> JsString(sourcePath),
     "Destination" -> JsString(destinationPath),
@@ -49,26 +38,6 @@ object ItDataUtils {
       )
     )
   )
-
-  val exampleJSON = JsObject(
-    "Source" -> JsString(sourcePath),
-    "Destination" -> JsString(destinationPath),
-    "Extensions" -> JsArray(JsString("*")),
-    "IgnoredExtensions" -> JsArray(),
-    "SyncItems" -> JsArray(
-      JsObject(
-        "Name" -> JsString("sub folder 1"),
-        "Path" -> JsString("sub1"),
-        "ProtectedDirectories" -> JsArray()
-      )
-    )
-  )
-
-  def randomizeSettingsPath = {
-    val randomString = UUID.randomUUID.toString.substring(0, 4)
-    settingsPath.replace("settings", s"settings_$randomString")
-  }
-
   private val sourceCopyPath = sourcePath + "copy"
   private val destinationCopyPath = destinationPath + "copy"
   private val sourceCopy = File(sourceCopyPath)
@@ -76,10 +45,33 @@ object ItDataUtils {
   private val source = File(sourcePath)
   private val destination = File(destinationPath)
 
+  def randomizeSettingsPath = {
+    val randomString = UUID.randomUUID.toString.substring(0, 4)
+    settingsPath.replace("settings", s"settings_$randomString")
+  }
+
   def setupTestResources: Unit = {
     destination.copyTo(destinationCopy, true)
     source.copyTo(sourceCopy, true)
     deleteSettings
+  }
+
+  def deleteSettings() = {
+
+    val file = File(settingsPath)
+    file.delete(true)
+  }
+
+  def settingsPath = {
+    val resourcePath = getClass.getResource("").getPath
+    val parentPath = File(resourcePath)
+      .parent
+      .parent
+      .parent
+      .parent
+      .toString()
+    s"$parentPath$getSeparator" + "settings.json"
+
   }
 
   def teardownTestResources: Unit = {
@@ -90,15 +82,5 @@ object ItDataUtils {
     sourceCopy.copyTo(source, true)
     sourceCopy.delete(false)
     deleteSettings
-  }
-
-  val settingsPath = sourcePath
-    .replace("test-classes/", "")
-    .replace("source", "settings.json")
-
-  def deleteSettings() = {
-
-    val file = File(settingsPath)
-    file.delete(true)
   }
 }

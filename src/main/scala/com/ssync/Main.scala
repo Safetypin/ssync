@@ -1,5 +1,7 @@
 package com.ssync
 
-object Main {
+import com.ssync.service.SyncService
 
+object Main extends App with SyncService {
+  runSyncService()
 }

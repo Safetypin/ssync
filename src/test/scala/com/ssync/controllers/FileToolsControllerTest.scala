@@ -39,7 +39,6 @@ class FileToolsControllerTest extends FlatSpec
   it should "throw an FileNotFoundException if directory doesn't exist" in {
     val randomFileName = randomizedDestinationDirectoryFilePath
     intercept[FileNotFoundException](createFile(randomFileName, ""))
-    //    deleteFile(randomFileName)
   }
 
   "openAndReadFile" should "be able to read text file" in {

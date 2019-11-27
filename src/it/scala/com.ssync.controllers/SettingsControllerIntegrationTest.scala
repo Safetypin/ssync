@@ -19,8 +19,8 @@ class SettingsControllerIntegrationTest extends FlatSpec
     deleteSettings(settingsPath)
   }
 
-  def deleteSettings(settingsPath: String) = {
-    new File(settingsPath).delete
+  override def afterEach {
+    deleteSettings(settingsPath)
   }
 
   "loadSettings" should "throw an exception if there is no settings file" in {
@@ -35,7 +35,7 @@ class SettingsControllerIntegrationTest extends FlatSpec
     result.Extensions shouldEqual Array("jpg")
   }
 
-  override def afterEach {
-    deleteSettings(settingsPath)
+  def deleteSettings(settingsPath: String) = {
+    new File(settingsPath).delete
   }
 }

@@ -3,8 +3,8 @@ package com.ssync.service
 import java.io.FileNotFoundException
 
 import better.files.File
-import com.ssync.controllers.ItDataUtils._
 import com.ssync.controllers.FileToolUtils.getSeparator
+import com.ssync.controllers.ItDataUtils._
 import com.ssync.models.{SettingSyncItem, Settings}
 import org.scalatest.Matchers._
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach, FlatSpec}
@@ -55,7 +55,7 @@ class SyncServiceTest extends FlatSpec
 
   private def createSettingJson(filename: String, settings: Settings) = {
     val json = convertSettingsToJson(settings)
-      createFile(filename, json.toString)
+    createFile(filename, json.toString)
   }
 
 }

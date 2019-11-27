@@ -19,9 +19,9 @@ trait SyncService extends
     logger.info(s"$processedItems items processed.")
     logger.info(s"$successfulProcessedItems items successfully processed.")
     logger.info(s"$unsuccessfulProcessedItems items unsuccessfully processed.")
-//    syncItems
-//      .map(item => {
-//        cleanSyncItemSource(item)
-//      })
+    //    syncItems
+    //      .map(item => {
+    //        cleanSyncItemSource(item)
+    //      })
   }
 }

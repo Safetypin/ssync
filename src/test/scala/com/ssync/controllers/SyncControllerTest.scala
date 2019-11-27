@@ -10,8 +10,6 @@ import com.ssync.models.{SettingSyncItem, Settings, SyncItem}
 import org.scalatest.Matchers._
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach, FlatSpec}
 
-import scala.collection.View.Empty
-
 class SyncControllerTest extends FlatSpec
   with BeforeAndAfter
   with BeforeAndAfterEach
@@ -126,7 +124,7 @@ class SyncControllerTest extends FlatSpec
     val subSourceDirectory = File(subSourceDirectoryPath)
     subSourceDirectory
       .listRecursively
-        .filter(!_.isDirectory)
+      .filter(!_.isDirectory)
       .toList shouldEqual List.empty
     val processedSyncFileItems = processedSyncItem.get.SyncFileItems
     processedSyncFileItems.length shouldEqual 6
