@@ -74,6 +74,13 @@ trait SyncController extends LazyLogging with FileToolsController {
     val protectedDirectories = syncItem.ProtectedDirectories
     Try {
       val directories = collectSourceDirectoriesInOrder(source, protectedDirectories)
+      directories.foreach({
+        dir => {
+          if (dir.isEmpty) {
+            dir.delete()
+          }
+        }
+      })
     }
   }
 }

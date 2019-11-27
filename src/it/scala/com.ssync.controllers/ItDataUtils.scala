@@ -50,18 +50,6 @@ object ItDataUtils {
     settingsPath.replace("settings", s"settings_$randomString")
   }
 
-  def setupTestResources: Unit = {
-    destination.copyTo(destinationCopy, true)
-    source.copyTo(sourceCopy, true)
-    deleteSettings
-  }
-
-  def deleteSettings() = {
-
-    val file = File(settingsPath)
-    file.delete(true)
-  }
-
   def settingsPath = {
     val resourcePath = getClass.getResource("").getPath
     val parentPath = File(resourcePath)
@@ -72,6 +60,18 @@ object ItDataUtils {
       .toString()
     s"$parentPath$getSeparator" + "settings.json"
 
+  }
+
+  def setupTestResources: Unit = {
+    destination.copyTo(destinationCopy, true)
+    source.copyTo(sourceCopy, true)
+    deleteSettings
+  }
+
+  def deleteSettings() = {
+
+    val file = File(settingsPath)
+    file.delete(true)
   }
 
   def teardownTestResources: Unit = {

@@ -20,9 +20,9 @@ trait SyncService extends
     logger.info(s"$successfulProcessedItems items successfully processed.")
     logger.info(s"$unsuccessfulProcessedItems items unsuccessfully processed.")
     val cleanedItems = syncItems
-          .map(item => {
-            cleanSyncItemSource(item)
-          })
+      .map(item => {
+        cleanSyncItemSource(item)
+      })
     val processedCleanedItems = processedSyncItems.length
     val successfulCleanedProcessedItems = cleanedItems.count(_.isSuccess)
     val unsuccessfulCleanedProcessedItems = cleanedItems.count(_.isFailure)
