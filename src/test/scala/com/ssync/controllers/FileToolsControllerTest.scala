@@ -120,11 +120,11 @@ class FileToolsControllerTest extends FlatSpec
     returnedFiles.isEmpty shouldEqual false
     returnedFiles.length shouldEqual 6
     returnedFiles.exists(f => f.name.equals("first.txt")) shouldEqual true
-    returnedFiles.filter(f => f.name.equals("first.txt")).length shouldEqual 2
+    returnedFiles.count(f => f.name.equals("first.txt")) shouldEqual 2
     returnedFiles.exists(f => f.name.equals("second.TXT")) shouldEqual true
-    returnedFiles.filter(f => f.name.equals("second.TXT")).length shouldEqual 2
+    returnedFiles.count(f => f.name.equals("second.TXT")) shouldEqual 2
     returnedFiles.exists(f => f.name.equals("test.jpg")) shouldEqual true
-    returnedFiles.filter(f => f.name.equals("test.jpg")).length shouldEqual 2
+    returnedFiles.count(f => f.name.equals("test.jpg")) shouldEqual 2
   }
   it should "return 2 txt, 2 TXT and 2 jpg file based on txt, jpg extensions with a sub folder" in {
     val subFolder3 = s"$sourcePath$getSeparator" + "sub 3"
@@ -132,11 +132,11 @@ class FileToolsControllerTest extends FlatSpec
     returnedFiles.isEmpty shouldEqual false
     returnedFiles.length shouldEqual 6
     returnedFiles.exists(f => f.name.equals("first.txt")) shouldEqual true
-    returnedFiles.filter(f => f.name.equals("first.txt")).length shouldEqual 2
+    returnedFiles.count(f => f.name.equals("first.txt")) shouldEqual 2
     returnedFiles.exists(f => f.name.equals("second.TXT")) shouldEqual true
-    returnedFiles.filter(f => f.name.equals("second.TXT")).length shouldEqual 2
+    returnedFiles.count(f => f.name.equals("second.TXT")) shouldEqual 2
     returnedFiles.exists(f => f.name.equals("test.jpg")) shouldEqual true
-    returnedFiles.filter(f => f.name.equals("test.jpg")).length shouldEqual 2
+    returnedFiles.count(f => f.name.equals("test.jpg")) shouldEqual 2
   }
 
   "moveFiles" should "move file from the source folder to destination" in {
@@ -195,9 +195,9 @@ class FileToolsControllerTest extends FlatSpec
     val returnedDir = collectSourceDirectoriesInOrder(sourceSubPath, List(""))
     returnedDir.length shouldEqual 3
     returnedDir.exists(f => f.name.equals("sub")) shouldEqual true
-    returnedDir.filter(f => f.name.equals("sub")).length shouldEqual 1
+    returnedDir.count(f => f.name.equals("sub")) shouldEqual 1
     returnedDir.exists(f => f.name.equals("sub 1")) shouldEqual true
-    returnedDir.filter(f => f.name.equals("sub 1")).length shouldEqual 2
+    returnedDir.count(f => f.name.equals("sub 1")) shouldEqual 2
   }
   it should "return all directories from source directory excluding sub directory" in {
     val sourceSubPath = s"$sourcePath$getSeparator" + "sub 4"
@@ -206,7 +206,7 @@ class FileToolsControllerTest extends FlatSpec
     returnedDir.length shouldEqual 2
     returnedDir.exists(f => f.name.equals("sub")) shouldEqual false
     returnedDir.exists(f => f.name.equals("sub 1")) shouldEqual true
-    returnedDir.filter(f => f.name.equals("sub 1")).length shouldEqual 2
+    returnedDir.count(f => f.name.equals("sub 1")) shouldEqual 2
   }
   it should "return all directories from source directory excluding sub 1 directory" in {
     val sourceSubPath = s"$sourcePath$getSeparator" + "sub 4"
@@ -215,7 +215,7 @@ class FileToolsControllerTest extends FlatSpec
     returnedDir.length shouldEqual 1
     returnedDir.exists(f => f.name.equals("sub 1")) shouldEqual false
     returnedDir.exists(f => f.name.equals("sub")) shouldEqual true
-    returnedDir.filter(f => f.name.equals("sub")).length shouldEqual 1
+    returnedDir.count(f => f.name.equals("sub")) shouldEqual 1
   }
 
   "deleteEmptySourceDirectories" should "remove all empty sub folders in the correct order" in {
@@ -239,7 +239,7 @@ class FileToolsControllerTest extends FlatSpec
     returnedDir2ndPass.isEmpty shouldEqual false
     returnedDir2ndPass.length shouldEqual 1
     returnedDir2ndPass.exists(f => f.name.equals("sub")) shouldEqual true
-    returnedDir2ndPass.filter(f => f.name.equals("sub")).length shouldEqual 1
+    returnedDir2ndPass.count(f => f.name.equals("sub")) shouldEqual 1
   }
 
 }

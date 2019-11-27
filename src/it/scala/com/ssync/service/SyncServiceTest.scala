@@ -48,9 +48,9 @@ class SyncServiceTest extends FlatSpec
     subDestinationDirectory.exists shouldEqual true
     val subDestinationFiles = subDestinationDirectory.list.toList
     subDestinationFiles.exists(f => f.name.equals("first.txt")) shouldEqual true
-    subDestinationFiles.filter(f => f.name.equals("first.txt")).length shouldEqual 1
+    subDestinationFiles.count(f => f.name.equals("first.txt")) shouldEqual 1
     subDestinationFiles.exists(f => f.name.equals("firstj.jpg")) shouldEqual true
-    subDestinationFiles.filter(f => f.name.equals("firstj.jpg")).length shouldEqual 1
+    subDestinationFiles.count(f => f.name.equals("firstj.jpg")) shouldEqual 1
   }
 
   private def createSettingJson(filename: String, settings: Settings) = {
