@@ -40,7 +40,10 @@ trait SyncController extends LazyLogging with FileToolsController {
     val source = syncItem.SourcePath
     Try {
       doesSourceExist(source)
-      val files = collectFilesBasedOnExtensions(source, syncItem.Extensions)
+      val files = filterFilesBasedOnExtensions(
+        collectFiles(source),
+        syncItem.Extensions
+      )
       val syncFileItems = files.map {
         constructSyncItemFileWithDestination(syncItem, _)
       }

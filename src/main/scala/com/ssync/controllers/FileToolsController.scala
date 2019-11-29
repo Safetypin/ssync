@@ -50,22 +50,40 @@ trait FileToolsController extends LazyLogging {
     dir.exists && dir.isDirectory
   }
 
-  def collectFilesBasedOnExtensions(path: String, extensions: List[String]):
-  List[BFile] = {
-    val directory = BFile(path)
+  def filterFilesBasedOnExtensions(files: List[BFile], extensions: List[String]): List[BFile] = {
     extensions.contains("*") match {
-      case true => directory
-        .listRecursively.filter(!_.isDirectory).toList
+      case true => files
       case false =>
-        directory.listRecursively
+        files
           .filter(!_.isDirectory)
           .filter(
             file => {
               val ext = file.extension(false, false, true).get
               extensions.exists(_ == ext)
             }
-          ).toList
+          )
     }
+  }
+
+  def filterFilesBasedOnIgnoredExtensions(files: List[BFile], extensions: List[String]): List[BFile] = {
+    extensions.contains("*") match {
+      case true => List()
+      case false =>
+        files
+          .filter(!_.isDirectory)
+          .filterNot(
+            file => {
+              val ext = file.extension(false, false, true).get
+              extensions.exists(_ == ext)
+            }
+          )
+    }
+  }
+
+  def collectFiles(path: String): List[BFile] = {
+    val directory = BFile(path)
+    directory
+      .listRecursively.filter(!_.isDirectory).toList
   }
 
   def moveFiles(syncFileItems: List[SyncFileItem]) = {

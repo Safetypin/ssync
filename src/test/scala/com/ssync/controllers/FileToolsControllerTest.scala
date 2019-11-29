@@ -72,16 +72,16 @@ class FileToolsControllerTest extends FlatSpec
     doesDirectoryExist(randomFileName) shouldEqual false
   }
 
-  "collectFilesBasedOnExtensions" should "return 1 txt file based on txt extension" in {
+  "filterFilesBasedOnExtensions" should "return 1 txt file based on txt extension" in {
     val subFolder1 = s"$sourcePath$getSeparator" + "sub 1"
-    val returnedFiles = collectFilesBasedOnExtensions(subFolder1, List("txt"))
+    val returnedFiles = filterFilesBasedOnExtensions(collectFiles(subFolder1), List("txt"))
     returnedFiles.isEmpty shouldEqual false
     returnedFiles.length shouldEqual 1
     returnedFiles.head.name shouldEqual "first.txt"
   }
   it should "return 1 txt and 1 TXT file based on txt extension" in {
     val subFolder2 = s"$sourcePath$getSeparator" + "sub 2"
-    val returnedFiles = collectFilesBasedOnExtensions(subFolder2, List("txt"))
+    val returnedFiles = filterFilesBasedOnExtensions(collectFiles(subFolder2), List("txt"))
     returnedFiles.isEmpty shouldEqual false
     returnedFiles.length shouldEqual 2
     returnedFiles.exists(f => f.name.equals("first.txt")) shouldEqual true
@@ -89,7 +89,7 @@ class FileToolsControllerTest extends FlatSpec
   }
   it should "return 1 txt, 1 TXT and 1 jpg file based on txt, jpg extension" in {
     val subFolder2 = s"$sourcePath$getSeparator" + "sub 2"
-    val returnedFiles = collectFilesBasedOnExtensions(subFolder2, List("txt", "jpg"))
+    val returnedFiles = filterFilesBasedOnExtensions(collectFiles(subFolder2), List("txt", "jpg"))
     returnedFiles.isEmpty shouldEqual false
     returnedFiles.length shouldEqual 3
     returnedFiles.exists(f => f.name.equals("first.txt")) shouldEqual true
@@ -98,7 +98,7 @@ class FileToolsControllerTest extends FlatSpec
   }
   it should "return 1 txt, 1 TXT and 1 jpg file based on * extension" in {
     val subFolder2 = s"$sourcePath$getSeparator" + "sub 2"
-    val returnedFiles = collectFilesBasedOnExtensions(subFolder2, List("*"))
+    val returnedFiles = filterFilesBasedOnExtensions(collectFiles(subFolder2), List("*"))
     returnedFiles.isEmpty shouldEqual false
     returnedFiles.length shouldEqual 3
     returnedFiles.exists(f => f.name.equals("first.txt")) shouldEqual true
@@ -107,7 +107,7 @@ class FileToolsControllerTest extends FlatSpec
   }
   it should "return 1 txt, 1 TXT and 1 jpg file based on * in a list of extensions" in {
     val subFolder2 = s"$sourcePath$getSeparator" + "sub 2"
-    val returnedFiles = collectFilesBasedOnExtensions(subFolder2, List("*", "txt"))
+    val returnedFiles = filterFilesBasedOnExtensions(collectFiles(subFolder2), List("*", "txt"))
     returnedFiles.isEmpty shouldEqual false
     returnedFiles.length shouldEqual 3
     returnedFiles.exists(f => f.name.equals("first.txt")) shouldEqual true
@@ -116,7 +116,7 @@ class FileToolsControllerTest extends FlatSpec
   }
   it should "return 2 txt, 2 TXT and 2 jpg file based on * extension with a sub folder" in {
     val subFolder3 = s"$sourcePath$getSeparator" + "sub 3"
-    val returnedFiles = collectFilesBasedOnExtensions(subFolder3, List("*", "txt"))
+    val returnedFiles = filterFilesBasedOnExtensions(collectFiles(subFolder3), List("*", "txt"))
     returnedFiles.isEmpty shouldEqual false
     returnedFiles.length shouldEqual 6
     returnedFiles.exists(f => f.name.equals("first.txt")) shouldEqual true
@@ -128,7 +128,7 @@ class FileToolsControllerTest extends FlatSpec
   }
   it should "return 2 txt, 2 TXT and 2 jpg file based on txt, jpg extensions with a sub folder" in {
     val subFolder3 = s"$sourcePath$getSeparator" + "sub 3"
-    val returnedFiles = collectFilesBasedOnExtensions(subFolder3, List("jpg", "txt"))
+    val returnedFiles = filterFilesBasedOnExtensions(collectFiles(subFolder3), List("jpg", "txt"))
     returnedFiles.isEmpty shouldEqual false
     returnedFiles.length shouldEqual 6
     returnedFiles.exists(f => f.name.equals("first.txt")) shouldEqual true
@@ -220,7 +220,7 @@ class FileToolsControllerTest extends FlatSpec
 
   "deleteEmptySourceDirectories" should "remove all empty sub folders in the correct order" in {
     val sourceSubPath = s"$sourcePath$getSeparator" + "sub 5"
-    val filesToDelete = collectFilesBasedOnExtensions(sourceSubPath, List("*"))
+    val filesToDelete = filterFilesBasedOnExtensions(collectFiles(sourceSubPath), List("*"))
     filesToDelete.foreach(_.delete(true))
 
     val returnedDir = collectSourceDirectoriesInOrder(sourceSubPath, List(""))
@@ -230,7 +230,7 @@ class FileToolsControllerTest extends FlatSpec
   }
   it should "remove all empty sub folders in the correct order except for " in {
     val sourceSubPath = s"$sourcePath$getSeparator" + "sub 5"
-    val filesToDelete = collectFilesBasedOnExtensions(sourceSubPath, List("*"))
+    val filesToDelete = filterFilesBasedOnExtensions(collectFiles(sourceSubPath), List("*"))
     filesToDelete.foreach(_.delete(true))
 
     val returnedDir = collectSourceDirectoriesInOrder(sourceSubPath, List("sub"))
