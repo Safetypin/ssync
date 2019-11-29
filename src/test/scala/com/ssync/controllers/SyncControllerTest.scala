@@ -66,19 +66,19 @@ class SyncControllerTest extends FlatSpec
     val syncFileItem = constructSyncItemFileWithDestination(syncItem, file)
     syncFileItem.Destination shouldEqual File(destinationPath)
   }
-  it should "populate destination of sub folder" in {
+  it should "populate destination of sub directory" in {
     val file = File(s"$sourcePath$getSeparator" + "sub 1" + getSeparator + "firstj.jpg")
-    val subFolder = File(s"$destinationPath$getSeparator" + "sub 1")
+    val subDirectory = File(s"$destinationPath$getSeparator" + "sub 1")
     val syncItem = SyncItem("test", sourcePath, destinationPath, List("*"), List(""), List(""))
     val syncFileItem = constructSyncItemFileWithDestination(syncItem, file)
-    syncFileItem.Destination shouldEqual subFolder
+    syncFileItem.Destination shouldEqual subDirectory
   }
 
   "processSyncItem" should "handle a non existent directory with a FileNotFoundException Failure" in {
     val subSourceDirectory = s"$sourcePath$getSeparator" + "sub1"
     val subDestinationDirectory = s"$destinationPath$getSeparator" + "sub1"
     val syncItem = SyncItem(
-      "sub folder 1",
+      "sub directory 1",
       subSourceDirectory,
       subDestinationDirectory,
       List("*"),
@@ -93,7 +93,7 @@ class SyncControllerTest extends FlatSpec
     val subSourceDirectoryPath = s"$sourcePath$getSeparator" + "sub 1"
     val subDestinationDirectoryPath = s"$destinationPath$getSeparator" + "sub 1"
     val syncItem = SyncItem(
-      "sub folder 1",
+      "sub directory 1",
       subSourceDirectoryPath,
       subDestinationDirectoryPath,
       List("*"),
@@ -112,7 +112,7 @@ class SyncControllerTest extends FlatSpec
     val subSourceDirectoryPath = s"$sourcePath$getSeparator" + "sub 3"
     val subDestinationDirectoryPath = s"$destinationPath$getSeparator" + "sub 3"
     val syncItem = SyncItem(
-      "sub folder 1",
+      "sub directory 1",
       subSourceDirectoryPath,
       subDestinationDirectoryPath,
       List("*"),
@@ -139,7 +139,7 @@ class SyncControllerTest extends FlatSpec
     val subSourceDirectoryPath = s"$sourcePath$getSeparator" + "sub 3"
     val subDestinationDirectoryPath = s"$destinationPath$getSeparator" + "sub 3"
     val syncItem = SyncItem(
-      "sub folder 1",
+      "sub directory 1",
       subSourceDirectoryPath,
       subDestinationDirectoryPath,
       List("txt"),

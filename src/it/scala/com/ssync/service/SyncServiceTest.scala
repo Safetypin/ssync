@@ -22,7 +22,7 @@ class SyncServiceTest extends FlatSpec
     teardownTestResources
   }
 
-  "run" should "throw an exception on first run" in {
+  "runSyncService" should "throw an exception on first run" in {
     intercept[FileNotFoundException](runSyncService())
   }
   it should "return a move all files from source-sub 1 to destination-sub 1" in {
@@ -34,7 +34,7 @@ class SyncServiceTest extends FlatSpec
       Array("*"),
       Array(),
       Seq(SettingSyncItem(
-        "sub folder 1",
+        "sub directory 1",
         sub,
         Array())
       )
@@ -62,7 +62,7 @@ class SyncServiceTest extends FlatSpec
       Array("*"),
       Array(),
       Seq(SettingSyncItem(
-        "sub folder 2",
+        "sub directory 2",
         sub,
         Array())
       )
@@ -92,7 +92,7 @@ class SyncServiceTest extends FlatSpec
       Array("*"),
       Array(),
       Seq(SettingSyncItem(
-        "sub folder 3",
+        "sub directory 3",
         sub,
         Array())
       )
@@ -132,7 +132,7 @@ class SyncServiceTest extends FlatSpec
       Array("*"),
       Array(),
       Seq(SettingSyncItem(
-        "sub folder 4",
+        "sub directory 4",
         sub,
         Array())
       )
@@ -190,7 +190,7 @@ class SyncServiceTest extends FlatSpec
       Array("*"),
       Array(),
       Seq(SettingSyncItem(
-        "sub folder 5",
+        "sub directory 5",
         sub,
         Array())
       )
@@ -248,7 +248,7 @@ class SyncServiceTest extends FlatSpec
       Array("txt"),
       Array(),
       Seq(SettingSyncItem(
-        "sub folder 1",
+        "sub directory 1",
         sub,
         Array())
       )
@@ -277,7 +277,7 @@ class SyncServiceTest extends FlatSpec
       Array("txt"),
       Array(),
       Seq(SettingSyncItem(
-        "sub folder 2",
+        "sub directory 2",
         sub,
         Array())
       )
@@ -308,7 +308,7 @@ class SyncServiceTest extends FlatSpec
       Array("txt"),
       Array(),
       Seq(SettingSyncItem(
-        "sub folder 3",
+        "sub directory 3",
         sub,
         Array())
       )
@@ -350,7 +350,7 @@ class SyncServiceTest extends FlatSpec
       Array("*"),
       Array(),
       Seq(SettingSyncItem(
-        "sub folder 3",
+        "sub directory 3",
         sub,
         Array("sub")
       )
@@ -393,7 +393,7 @@ class SyncServiceTest extends FlatSpec
       Array("*"),
       Array(),
       Seq(SettingSyncItem(
-        "sub folder 4",
+        "sub directory 4",
         sub,
         Array("sub", "sub 1"))
       )
@@ -451,6 +451,49 @@ class SyncServiceTest extends FlatSpec
     val subSubSub1SourceDirectory = subSubSourceDirectory.list.toList.filter(f => f.name.equals("sub 1")).head
     subSubSub1SourceDirectory.isDirectory shouldEqual true
     subSubSub1SourceDirectory.isEmpty shouldEqual true
+  }
+
+  it should "return a move just .txt extension files from source-sub 3 to destination-sub 3 with exclusion jpg " in {
+
+    val sub = "sub 3"
+    val exampleSettings: Settings = Settings(
+      sourcePath,
+      destinationPath,
+      Array("*"),
+      Array("jpg"),
+      Seq(SettingSyncItem(
+        "sub directory 3",
+        sub,
+        Array())
+      )
+    )
+
+    createSettingJson(settingsPath, exampleSettings)
+    runSyncService()
+    val subSourceDirectory = File(s"$sourcePath$getSeparator$sub")
+    val subDestinationDirectory = File(s"$destinationPath$getSeparator$sub")
+    subSourceDirectory.exists shouldEqual true
+    subSourceDirectory.isEmpty shouldEqual false
+    subDestinationDirectory.exists shouldEqual true
+    val subDestinationFiles = subDestinationDirectory.list.toList
+    subDestinationFiles.exists(f => f.name.equals("sub")) shouldEqual true
+    subDestinationFiles.count(f => f.name.equals("sub")) shouldEqual 1
+    subDestinationFiles.exists(f => f.name.equals("first.txt")) shouldEqual true
+    subDestinationFiles.count(f => f.name.equals("first.txt")) shouldEqual 1
+    subDestinationFiles.exists(f => f.name.equals("second.TXT")) shouldEqual true
+    subDestinationFiles.count(f => f.name.equals("second.TXT")) shouldEqual 1
+    val subSourceFiles = subSourceDirectory.list.toList
+    subSourceFiles.exists(f => f.name.equals("test.jpg")) shouldEqual true
+    subSourceFiles.count(f => f.name.equals("test.jpg")) shouldEqual 1
+    val subSubDestinationFiles = subDestinationFiles.filter(f => f.name.equals("sub")).head.list.toList
+    subSubDestinationFiles.exists(f => f.name.equals("first.txt")) shouldEqual true
+    subSubDestinationFiles.count(f => f.name.equals("first.txt")) shouldEqual 1
+    subSubDestinationFiles.exists(f => f.name.equals("second.TXT")) shouldEqual true
+    subSubDestinationFiles.count(f => f.name.equals("second.TXT")) shouldEqual 1
+    val subSubSourceFiles = subSourceFiles.filter(f => f.name.equals("sub")).head.list.toList
+    subSubSourceFiles.exists(f => f.name.equals("test.jpg")) shouldEqual true
+    subSubSourceFiles.count(f => f.name.equals("test.jpg")) shouldEqual 1
+
   }
 
   private def createSettingJson(filename: String, settings: Settings) = {

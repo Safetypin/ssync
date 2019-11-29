@@ -42,8 +42,8 @@ class SettingsControllerTest extends FlatSpec
     result.SyncItems.length shouldEqual 1
     val syncItem = result.SyncItems.head
     syncItem == SettingSyncItem(
-      "sub folder 1",
-      "sub folder 1",
+      "sub directory 1",
+      "sub directory 1",
       Array(""))
   }
 

@@ -20,8 +20,8 @@ object DataUtils {
     Array(""),
     Seq(
       SettingSyncItem(
-        "sub folder 1",
-        "sub folder 1",
+        "sub directory 1",
+        "sub directory 1",
         Array("")
       )
     )
@@ -33,8 +33,8 @@ object DataUtils {
     "IgnoredExtensions" -> JsArray(JsString("")),
     "SyncItems" -> JsArray(
       JsObject(
-        "Name" -> JsString("sub folder 1"),
-        "Path" -> JsString("sub folder 1"),
+        "Name" -> JsString("sub directory 1"),
+        "Path" -> JsString("sub directory 1"),
         "ProtectedDirectories" -> JsArray(JsString(""))
       )
     )

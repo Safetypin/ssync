@@ -50,7 +50,7 @@ trait FileToolsController extends LazyLogging {
     dir.exists && dir.isDirectory
   }
 
-  def filterFilesBasedOnExtensions(files: List[BFile], extensions: List[String]): List[BFile] = {
+  def filterFilesBasedOnIncludedExtensions(files: List[BFile], extensions: List[String]): List[BFile] = {
     extensions.contains("*") match {
       case true => files
       case false =>
