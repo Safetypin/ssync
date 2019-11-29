@@ -2,15 +2,15 @@ import Dependencies._
 
 lazy val root = (project in file("."))
   .configs(IntegrationTest)
-
   .settings(
     Defaults.itSettings,
-    libraryDependencies += scalaTest % "it,test",
     inThisBuild(List(
       organization := "com.ssync",
       version := "0.1",
       scalaVersion := "2.13.1"
     )),
+    libraryDependencies += scalaTest % "it,test",
+    assemblyJarName in assembly := "ssync.jar",
     name := "ssync"
   )
 libraryDependencies ++= Seq(
@@ -25,3 +25,8 @@ libraryDependencies ++= Seq(
 )
 parallelExecution in Test := false
 parallelExecution in IntegrationTest := false
+
+assemblyMergeStrategy in assembly := {
+  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+  case x => MergeStrategy.first
+}
