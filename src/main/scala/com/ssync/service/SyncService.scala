@@ -16,9 +16,9 @@ trait SyncService extends
     val successfulProcessedItems = processedSyncItems.count(_.isSuccess)
     val unsuccessfulProcessedItems = processedSyncItems.count(_.isFailure)
 
-    logger.info(s"$processedItems items processed.")
-    logger.info(s"$successfulProcessedItems items successfully processed.")
-    logger.info(s"$unsuccessfulProcessedItems items unsuccessfully processed.")
+    logger.info(s"Number of directories processed: $processedItems.")
+    logger.info(s"Number of directories successfully processed: $successfulProcessedItems.")
+    logger.info(s"umber of directories unsuccessfully processed: $unsuccessfulProcessedItems.")
     val cleanedItems = syncItems
       .map(item => {
         cleanSyncItemSource(item)
@@ -26,8 +26,8 @@ trait SyncService extends
     val processedCleanedItems = processedSyncItems.length
     val successfulCleanedProcessedItems = cleanedItems.count(_.isSuccess)
     val unsuccessfulCleanedProcessedItems = cleanedItems.count(_.isFailure)
-    logger.info(s"$processedCleanedItems items cleaned.")
-    logger.info(s"$successfulCleanedProcessedItems items successfully cleaned.")
-    logger.info(s"$unsuccessfulCleanedProcessedItems items unsuccessfully cleaned.")
+    logger.info(s"Number of directories cleaned: $processedCleanedItems.")
+    logger.info(s"Number of directories successfully cleaned: $successfulCleanedProcessedItems.")
+    logger.info(s"Number of directories unsuccessfully cleaned: $unsuccessfulCleanedProcessedItems.")
   }
 }

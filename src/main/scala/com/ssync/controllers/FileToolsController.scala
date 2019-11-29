@@ -100,11 +100,12 @@ trait FileToolsController extends LazyLogging {
 
   def renameFileBecauseItAlreadyExists(syncFileItem: SyncFileItem) = {
     val file = syncFileItem.FileItem
+    val filename = file.name
     val name = file.nameWithoutExtension
-    val extension = file.extension(true)
-    val renamed = name + "_" + randomString + extension.get
-    val renamedFile = file.renameTo(renamed)
-    logger.error(s"Renaming file from $name to $renamed")
+    val extension = file.extension(true).get
+    val renamedFilename = name + "_" + randomString + extension
+    val renamedFile = file.renameTo(renamedFilename)
+    logger.error(s"Renamed file from $filename to $renamedFilename")
     SyncFileItem(renamedFile, syncFileItem.Destination, RENAMED, None)
   }
 

@@ -207,6 +207,15 @@ class FileToolsControllerTest extends FlatSpec
     returnedFiles.isEmpty shouldEqual true
     returnedFiles.length shouldEqual 0
   }
+  it should "return 2 txt file based on jpg extension" in {
+    val subDirectory6 = s"$sourcePath$getSeparator" + "sub 6"
+    val subDirectory6Files = collectFiles(subDirectory6)
+    val returnedFiles = filterFilesBasedOnIgnoredExtensions(subDirectory6Files, List("ds_store"))
+    returnedFiles.isEmpty shouldEqual false
+    returnedFiles.length shouldEqual 2
+    returnedFiles.exists(f => f.name.equals("testfile.txt")) shouldEqual true
+    returnedFiles.exists(f => f.name.equals("testfile2.txt")) shouldEqual true
+  }
 
   "moveFiles" should "move file from the source Directory to destination" in {
     val file = File(s"$sourcePath$getSeparator" + "testfile2.txt")
